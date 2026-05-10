@@ -4,7 +4,7 @@
 
 Please do not open a public issue for security vulnerabilities.
 
-Report suspected vulnerabilities privately to the OOMUS maintainers with:
+Report suspected vulnerabilities privately to the Oomus maintainers with:
 
 - A clear description of the issue.
 - Steps to reproduce when applicable.

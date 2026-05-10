@@ -1,6 +1,6 @@
-# OOMUS eHealth CampaignID Documentation
+# Oomus eHealth CampaignID Documentation
 
-Public documentation for OOMUS eHealth CampaignID, a SaaS platform for generating, distributing and verifying secure digital cards for public health campaigns.
+Public documentation for Oomus eHealth CampaignID, a SaaS platform for generating, distributing and verifying secure digital cards for public health campaigns.
 
 This repository is intended for partners, frontend integrators, technical teams and pilot clients. It contains public product and technical documentation only.
 
@@ -47,7 +47,7 @@ Excluded:
 Recommended repository name:
 
 ```text
-oomus-ehealth-campaignid-docs
+Oomus-ehealth-campaignid-docs
 ```
 
 ## Publication
