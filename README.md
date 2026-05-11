@@ -16,13 +16,13 @@ This repository is intended for partners, frontend integrators, technical teams 
 
 | Section | Description |
 | --- | --- |
-| [Getting Started](./getting-started/) | Product scope and platform overview |
-| [Guides](./guides/) | Integration, generation and testing guides |
-| [Integrations](./integrations/) | DHIS2, Google Wallet, WhatsApp and SMS |
-| [Reference](./reference/) | API and database reference |
-| [Architecture](./architecture/) | Technical architecture |
-| [Security](./security/) | Cryptography, offline verification, data protection and responsible AI |
-| [Deployment](./deployment/) | Deployment and operations runbooks |
+| [Getting Started]() | Product scope and platform overview |
+| [Guides]() | Integration, generation and testing guides |
+| [Integrations]() | DHIS2, Google Wallet, WhatsApp and SMS |
+| [Reference]() | API and database reference |
+| [Architecture]() | Technical architecture |
+| [Security]() | Cryptography, offline verification, data protection and responsible AI |
+| [Deployment]() | Deployment and operations runbooks |
 
 ## Public Scope
 
