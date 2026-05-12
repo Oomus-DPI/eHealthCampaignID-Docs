@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for helping improve the Oomus eHealth CampaignID documentation.
+Thanks for helping improve the OOMUS eHealth CampaignID documentation.
 
 ## Contribution Rules
 

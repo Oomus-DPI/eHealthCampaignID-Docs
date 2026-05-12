@@ -1,6 +1,6 @@
 # Code of Conduct
 
-This documentation project is maintained for professional collaboration between Oomus, partners, integrators and technical teams.
+This documentation project is maintained for professional collaboration between OOMUS, partners, integrators and technical teams.
 
 Participants are expected to:
 

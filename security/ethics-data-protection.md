@@ -2,7 +2,7 @@
 
 ## Principes
 
-Oomus applique une logique de minimisation des donnees et de protection par conception.
+OOMUS applique une logique de minimisation des donnees et de protection par conception.
 
 ## Engagements
 

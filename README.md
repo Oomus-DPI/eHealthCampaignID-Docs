@@ -1,14 +1,16 @@
-# Oomus eHealth CampaignID Documentation
+# OOMUS eHealth CampaignID Documentation — v4.2
 
-Public documentation for Oomus eHealth CampaignID, a SaaS platform for generating, distributing and verifying secure digital cards for public health campaigns.
+Public documentation for OOMUS eHealth CampaignID, a GovTech enterprise SaaS platform for generating, distributing and verifying secure digital health cards for national public health campaigns.
 
-This repository is intended for partners, frontend integrators, technical teams and pilot clients. It contains public product and technical documentation only.
+This repository is intended for partners, frontend integrators, technical teams and pilot clients. It covers the full v4.2 platform: quota-based billing, real-time operations dashboard, campaign simulation engine, DHIS2 integration, Google Wallet, WhatsApp/SMS distribution and offline verification.
 
 ## Start Here
 
 - [Product Requirements](./getting-started/product-requirements.md)
 - [Technical Architecture](./architecture/technical-architecture.md)
 - [API Reference](./reference/api-reference.md)
+- [Billing & Quota Plans](./reference/billing-quota-plans.md)
+- [Simulation Wizard Guide](./guides/simulation-wizard.md)
 - [Generation Workflow](./guides/generation-workflow.md)
 - [Deployment Runbook](./deployment/deployment-runbook.md)
 
@@ -16,13 +18,13 @@ This repository is intended for partners, frontend integrators, technical teams 
 
 | Section | Description |
 | --- | --- |
-| [Getting Started]() | Product scope and platform overview |
-| [Guides]() | Integration, generation and testing guides |
-| [Integrations]() | DHIS2, Google Wallet, WhatsApp and SMS |
-| [Reference]() | API and database reference |
-| [Architecture]() | Technical architecture |
-| [Security]() | Cryptography, offline verification, data protection and responsible AI |
-| [Deployment]() | Deployment and operations runbooks |
+| [Getting Started](./getting-started/) | Product scope and platform overview |
+| [Guides](./guides/) | Campaign simulation, generation and integration guides |
+| [Integrations](./integrations/) | DHIS2, Google Wallet, WhatsApp and SMS |
+| [Reference](./reference/) | API reference, billing plans and database schema |
+| [Architecture](./architecture/) | Technical architecture |
+| [Security](./security/) | Cryptography, offline verification, data protection and responsible AI |
+| [Deployment](./deployment/) | Deployment and operations runbooks |
 
 ## Public Scope
 
@@ -47,7 +49,7 @@ Excluded:
 Recommended repository name:
 
 ```text
-Oomus-ehealth-campaignid-docs
+oomus-ehealth-campaignid-docs
 ```
 
 ## Publication

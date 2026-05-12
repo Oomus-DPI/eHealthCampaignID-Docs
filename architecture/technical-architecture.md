@@ -1,4 +1,4 @@
-# Technical Architecture - Oomus eHealth CampaignID v3.5
+# Technical Architecture - OOMUS eHealth CampaignID v3.5
 
 ## Vue d'ensemble
 

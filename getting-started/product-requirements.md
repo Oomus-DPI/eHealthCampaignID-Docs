@@ -1,4 +1,4 @@
-# Product Requirements Document - Oomus eHealth CampaignID v3.5
+# Product Requirements Document - OOMUS eHealth CampaignID v3.5
 
 ## Objectif produit
 
