@@ -10,6 +10,7 @@
 
 ## Guides
 
+- [Campaign Simulation Wizard](./guides/simulation-wizard.md)
 - [Generation Workflow](./guides/generation-workflow.md)
 - [Frontend Integration Guide](./guides/frontend-integration-guide.md)
 - [Testing Strategy](./guides/testing-strategy.md)
@@ -23,6 +24,7 @@
 ## Reference
 
 - [API Reference](./reference/api-reference.md)
+- [Billing & Quota Plans](./reference/billing-quota-plans.md)
 - [Database Schema](./reference/database-schema.md)
 
 ## Security
