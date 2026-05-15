@@ -1,59 +1,72 @@
-# OOMUS eHealth CampaignID Documentation — v4.2
+# Oomus CampaignID
 
-Public documentation for OOMUS eHealth CampaignID, a GovTech enterprise SaaS platform for generating, distributing and verifying secure digital health cards for national public health campaigns.
+**Infrastructure souveraine de santé publique numérique pour les programmes nationaux en Afrique et dans les pays à ressources limitées.**
 
-This repository is intended for partners, frontend integrators, technical teams and pilot clients. It covers the full v4.2 platform: quota-based billing, real-time operations dashboard, campaign simulation engine, DHIS2 integration, Google Wallet, WhatsApp/SMS distribution and offline verification.
+---
 
-## Start Here
+## Bienvenue sur la documentation officielle
 
-- [Product Requirements](./getting-started/product-requirements.md)
-- [Technical Architecture](./architecture/technical-architecture.md)
-- [API Reference](./reference/api-reference.md)
-- [Billing & Quota Plans](./reference/billing-quota-plans.md)
-- [Simulation Wizard Guide](./guides/simulation-wizard.md)
-- [Generation Workflow](./guides/generation-workflow.md)
-- [Deployment Runbook](./deployment/deployment-runbook.md)
+Oomus CampaignID est une plateforme GovTech Enterprise SaaS (v4.5) conçue pour la génération, la distribution, la vérification et la gouvernance de cartes d'identité sanitaire numériques sécurisées. Elle repose sur une identité numérique MPI (Master Patient Index) souveraine, interopérable HL7 FHIR R4, et pensée pour fonctionner dans des environnements à faible connectivité.
 
-## Documentation Map
+---
 
-| Section | Description |
-| --- | --- |
-| [Getting Started](./getting-started/) | Product scope and platform overview |
-| [Guides](./guides/) | Campaign simulation, generation and integration guides |
-| [Integrations](./integrations/) | DHIS2, Google Wallet, WhatsApp and SMS |
-| [Reference](./reference/) | API reference, billing plans and database schema |
-| [Architecture](./architecture/) | Technical architecture |
-| [Security](./security/) | Cryptography, offline verification, data protection and responsible AI |
-| [Deployment](./deployment/) | Deployment and operations runbooks |
+## Ce que fait Oomus CampaignID
 
-## Public Scope
+Oomus CampaignID permet aux programmes de santé nationaux et aux organisations humanitaires de :
 
-Included:
+- **Générer** des cartes de santé numériques sécurisées à grande échelle (jusqu'à 10 millions de bénéficiaires)
+- **Distribuer** les cartes par WhatsApp, SMS et Google Wallet depuis une interface unifiée
+- **Vérifier** l'authenticité des cartes hors ligne — sans connexion Internet requise
+- **Déduplicater** automatiquement les identités grâce au moteur MPI probabiliste
+- **Synchroniser** les données depuis DHIS2 Tracker en temps réel ou selon un calendrier configurable
+- **Gouverner** les accès, les quotas et les approbations grâce à un système RBAC institutionnel complet
 
-- Product and technical overview.
-- Public API and integration documentation.
-- Security model summaries.
-- Deployment and monitoring guidance.
-- Testing strategy.
+---
 
-Excluded:
+## Capacités clés
 
-- Business plan and internal financial documents.
-- Legal contracts, full internal compliance files and SLA terms.
-- Internal security policy details and risk register.
-- Secrets, credentials, environment files and production exports.
-- Client data, real DHIS2 exports and personally identifiable data.
+- **Card Studio** — Éditeur visuel avec 11 modèles de cartes, aperçu PNG, export YAML/JSON, options DPI 300/450/600
+- **Identité MPI souveraine** — 1 citoyen = 1 identifiant de santé numérique, inter-programmes, à vie
+- **Intégration DHIS2** — Synchronisation automatique, mapping d'attributs, génération de cartes depuis les enrollments
+- **Distribution multicanal** — WhatsApp (Meta Graph API v25.0), SMS (Orange API), Google Wallet
+- **Vérification hors ligne** — Portail statique, registre SHA-256, WebCrypto, multilingue (FR/EN/WO)
+- **Moteur de simulation** — Estimation proforma, workflow d'approbation admin, génération de contrats
+- **Dashboard opérationnel** — KPIs temps réel, analytics avancées, santé de l'infrastructure, alertes
+- **Sécurité enterprise** — AES-256-GCM, chaîne d'audit immuable, détection d'anomalies IA, garde données sensibles
 
-## Repository Name
+---
 
-Recommended repository name:
+## Pour qui
 
-```text
-oomus-ehealth-campaignid-docs
-```
+| Public cible | Cas d'usage typique |
+|---|---|
+| Programmes nationaux de santé | Vaccination, paludisme, nutrition, HIV/PTME |
+| Ministères de la Santé | Carte d'assurance maladie universelle, identité sanitaire nationale |
+| Agences humanitaires & ONG | Identification des réfugiés, distribution de moustiquaires (MILD) |
+| Agences gouvernementales | Identité nationale reliée aux services de santé |
+| Programmes de santé agricole | Carte agriculteur / santé rurale |
 
-## Publication
+---
 
-This documentation is written in Markdown and can be published directly on GitHub. It is also ready for a later migration to GitHub Pages, Docusaurus or Mintlify.
+## Stack technique
 
-Before publishing, follow the [Publishing Checklist](./PUBLISHING.md). Contributions and security reporting are covered by [CONTRIBUTING.md](./CONTRIBUTING.md), [SECURITY.md](./SECURITY.md) and [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md).
+| Composant | Technologie |
+|---|---|
+| Frontend | Next.js 15 |
+| Backend | FastAPI 0.115 |
+| Base de données | PostgreSQL 16 |
+| Files de tâches | Celery 5 + Redis 7 |
+| Stockage fichiers | MinIO / S3-compatible |
+| Interopérabilité | HL7 FHIR R4 |
+
+---
+
+## Démarrer maintenant
+
+Rendez-vous sur [Démarrage rapide](getting-started/quick-start.md) pour créer votre premier programme et générer vos premières cartes en moins de 10 minutes.
+
+Consultez les [Plans & Tarification](getting-started/plans-and-pricing.md) pour choisir le plan adapté à votre programme.
+
+---
+
+> **Oomus CampaignID** — *Une identité. Un citoyen. Un système de santé souverain.*

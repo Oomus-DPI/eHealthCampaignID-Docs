@@ -1,41 +1,51 @@
 # Summary
 
-## Getting Started
+* [Introduction](README.md)
 
-- [Product Requirements](./getting-started/product-requirements.md)
+## Prise en main
 
-## Architecture
+* [Vue d'ensemble](getting-started/overview.md)
+* [Démarrage rapide](getting-started/quick-start.md)
+* [Plans & Tarification](getting-started/plans-and-pricing.md)
 
-- [Technical Architecture](./architecture/technical-architecture.md)
+## Fonctionnalités
 
-## Guides
+* [Card Studio](features/card-studio.md)
+* [Gestion des campagnes](features/campaigns.md)
+* [Identité souveraine MPI](features/mpi-sovereign-identity.md)
+* [Intégration DHIS2](features/dhis2-integration.md)
+* [Distribution multicanal](features/distribution.md)
+* [Moteur de simulation](features/simulation-engine.md)
+* [Portail de vérification](features/verification.md)
+* [Dashboard & Analytics](features/dashboard-analytics.md)
 
-- [Campaign Simulation Wizard](./guides/simulation-wizard.md)
-- [Generation Workflow](./guides/generation-workflow.md)
-- [Frontend Integration Guide](./guides/frontend-integration-guide.md)
-- [Testing Strategy](./guides/testing-strategy.md)
+## Référence API
 
-## Integrations
+* [Authentification](api-reference/authentication.md)
+* [Campagnes & Jobs](api-reference/campaigns-and-jobs.md)
+* [Facturation](api-reference/billing.md)
+* [MPI](api-reference/mpi.md)
+* [DHIS2](api-reference/dhis2.md)
 
-- [DHIS2 Tracker Integration](./integrations/dhis2-integration.md)
-- [Google Wallet Integration](./integrations/google-wallet.md)
-- [Messaging Integration](./integrations/messaging.md)
+## Intégrations
 
-## Reference
+* [Guide DHIS2](integrations/dhis2.md)
+* [Google Wallet](integrations/google-wallet.md)
+* [Messagerie (WhatsApp & SMS)](integrations/messaging.md)
+* [HL7 FHIR R4](integrations/fhir-r4.md)
 
-- [API Reference](./reference/api-reference.md)
-- [Billing & Quota Plans](./reference/billing-quota-plans.md)
-- [Database Schema](./reference/database-schema.md)
+## Sécurité
 
-## Security
+* [Vue d'ensemble sécurité](security/overview.md)
+* [Garanties cryptographiques](security/cryptographic-guarantees.md)
+* [Vérification hors ligne](security/offline-verification.md)
+* [Protection des données](security/data-protection.md)
 
-- [Roles, Permissions & Approvals](./security/roles-permissions.md)
-- [Cryptographic Security](./security/cryptographic-security.md)
-- [Offline Verification](./security/offline-verification.md)
-- [AI Anomaly Detection](./security/anomaly-detection.md)
-- [Ethics & Data Protection](./security/ethics-data-protection.md)
+## Conformité
 
-## Deployment
+* [Conformité légale](compliance/legal-compliance.md)
+* [IA & Éthique](compliance/ai-ethics.md)
 
-- [Deployment Runbook](./deployment/deployment-runbook.md)
-- [Operations & Monitoring](./deployment/operations-monitoring.md)
+## Niveaux de service
+
+* [Accord de niveau de service (SLA)](service-levels.md)
