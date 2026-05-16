@@ -6,7 +6,7 @@
 
 ## Bienvenue sur la documentation officielle
 
-Oomus CampaignID est une plateforme GovTech Enterprise SaaS (v4.5) conçue pour la génération, la distribution, la vérification et la gouvernance de cartes d'identité sanitaire numériques sécurisées. Elle repose sur une identité numérique MPI (Master Patient Index) souveraine, interopérable HL7 FHIR R4, et pensée pour fonctionner dans des environnements à faible connectivité.
+Oomus CampaignID est une plateforme GovTech Enterprise SaaS (v5.1) conçue pour la génération, la distribution, la vérification et la gouvernance de cartes d'identité sanitaire numériques sécurisées. Elle repose sur une identité numérique MPI (Master Patient Index) souveraine, interopérable HL7 FHIR R4, et pensée pour fonctionner dans des environnements à faible connectivité.
 
 ---
 
@@ -27,12 +27,15 @@ Oomus CampaignID permet aux programmes de santé nationaux et aux organisations 
 
 - **Card Studio** — Éditeur visuel avec 11 modèles de cartes, aperçu PNG, export YAML/JSON, options DPI 300/450/600
 - **Identité MPI souveraine** — 1 citoyen = 1 identifiant de santé numérique, inter-programmes, à vie
-- **Intégration DHIS2** — Synchronisation automatique, mapping d'attributs, génération de cartes depuis les enrollments
+- **Intégration DHIS2** — Synchronisation automatique, 7 templates de cartes (vital/emerald/pulse/mothercare/shield/nomad/aero), génération depuis les enrollments
 - **Distribution multicanal** — WhatsApp (Meta Graph API v25.0), SMS (Orange API), Google Wallet
 - **Vérification hors ligne** — Portail statique, registre SHA-256, WebCrypto, multilingue (FR/EN/WO)
 - **Moteur de simulation** — Estimation proforma, workflow d'approbation admin, génération de contrats
-- **Dashboard opérationnel** — KPIs temps réel, analytics avancées, santé de l'infrastructure, alertes
-- **Sécurité enterprise** — AES-256-GCM, chaîne d'audit immuable, détection d'anomalies IA, garde données sensibles
+- **Dashboard opérationnel** — KPIs temps réel, analytics IA (prédictions 30j, anomalies, score santé), alertes
+- **Administration globale** — 6 pages admin cross-programmes (analytics, fraude, campagnes, jobs, PVC, MPI) avec charts interactifs
+- **Sécurité enterprise** — AES-256-GCM, chaîne d'audit immuable, 2FA TOTP, détection d'anomalies IA, garde données sensibles
+- **Branding programme** — Logo personnalisé par programme, couleur primaire, nom affiché — persistés en base et affichés dans toute l'interface
+- **Interface adaptative** — Responsive mobile (< 900 px : sidebar tiroir, header hamburger), mode sombre natif (Paramètres → Préférences)
 
 ---
 
@@ -52,12 +55,13 @@ Oomus CampaignID permet aux programmes de santé nationaux et aux organisations 
 
 | Composant | Technologie |
 |---|---|
-| Frontend | Next.js 15 |
-| Backend | FastAPI 0.115 |
-| Base de données | PostgreSQL 16 |
+| Frontend | Next.js 15 — responsive, dark mode, ThemeContext |
+| Backend | FastAPI 0.115 + SQLAlchemy 2 (async) |
+| Base de données | PostgreSQL 15+ (asyncpg) |
 | Files de tâches | Celery 5 + Redis 7 |
-| Stockage fichiers | MinIO / S3-compatible |
+| Stockage fichiers | MinIO / S3-compatible (logos, PDFs, portails) |
 | Interopérabilité | HL7 FHIR R4 |
+| Authentification | JWT HS256 + 2FA TOTP |
 
 ---
 

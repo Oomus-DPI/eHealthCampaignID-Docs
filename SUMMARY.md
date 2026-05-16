@@ -17,7 +17,7 @@
 * [Distribution multicanal](features/distribution.md)
 * [Moteur de simulation](features/simulation-engine.md)
 * [Portail de vérification](features/verification.md)
-* [Dashboard & Analytics](features/dashboard-analytics.md)
+* [Dashboard & Analytics IA](features/dashboard-analytics.md)
 
 ## Référence API
 
@@ -49,3 +49,7 @@
 ## Niveaux de service
 
 * [Accord de niveau de service (SLA)](service-levels.md)
+
+## Déploiement
+
+* [Guide de déploiement sécurisé](deployment.md)

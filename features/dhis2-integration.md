@@ -183,15 +183,21 @@ Le résultat : chaque enrollment DHIS2 est lié à l'identité MPI souveraine co
 
 ## Génération de cartes depuis DHIS2
 
-### 3 modèles DHIS2 dédiés
+### 7 modèles DHIS2 dédiés (v5.0)
 
-Oomus CampaignID propose 3 modèles de cartes optimisés pour les données DHIS2 :
+Oomus CampaignID propose 7 modèles de cartes optimisés pour les données DHIS2 :
 
-| Modèle | Nom | Description |
-|---|---|---|
-| `vital` | Vital Card | Carte de santé essentielle, champs minimaux |
-| `emerald` | Emerald Card | Carte intermédiaire avec champs programme |
-| `pulse` | Pulse Card | Carte complète avec QR, MPI et données étendues |
+| Modèle | Nom | Palette | Usage typique |
+|---|---|---|---|
+| `vital` | Vital Card | Bleu médical | Carte de santé essentielle, champs minimaux |
+| `emerald` | Emerald Card | Vert santé | Carte intermédiaire avec champs programme |
+| `pulse` | Pulse Card | Dark professionnel | Carte complète avec QR, MPI et données étendues |
+| `mothercare` | Mothercare Card | Rose/teal maternité | Suivi prénatal, vaccination mère-enfant |
+| `shield` | Shield Card | Bleu royal protection | Protection sociale, assurance, droits sociaux |
+| `nomad` | Nomad Card | Ocre/terre pastoral | Élevage, populations pastorales, santé rurale |
+| `aero` | Aero Card | Bleu ciel aérien | Vaccination renforcée, campagnes terrain |
+
+Tous les modèles incluent le **MPI ID souverain en pied de carte** (remplace le code-barres cosmétique) et le **QR chiffré AES-256** si `include_mpi_id: true`.
 
 ### Lancer la génération depuis DHIS2
 

@@ -9,7 +9,7 @@ Oomus CampaignID utilise une authentification **JWT (JSON Web Token)** basée su
 ## Durée de vie des tokens
 
 | Token | Durée de validité |
-|---|---|
+| --- | --- |
 | **Access token** | 30 minutes |
 | **Refresh token** | 30 jours |
 
@@ -52,7 +52,7 @@ Crée un nouveau compte programme.
 **Erreurs possibles :**
 
 | Code | Description |
-|---|---|
+| --- | --- |
 | `400` | Corps de requête invalide (champs manquants, format incorrect) |
 | `409` | Un compte avec cette adresse e-mail existe déjà |
 | `422` | Erreur de validation (mot de passe trop faible, e-mail invalide) |
@@ -86,7 +86,7 @@ Authentifie un utilisateur et retourne les tokens JWT.
 **Erreurs possibles :**
 
 | Code | Description |
-|---|---|
+| --- | --- |
 | `401` | Identifiants incorrects |
 | `403` | Compte désactivé |
 | `422` | Format de la requête invalide |
@@ -129,7 +129,7 @@ Obtient un nouvel access token à partir d'un refresh token valide.
 **Erreurs possibles :**
 
 | Code | Description |
-|---|---|
+| --- | --- |
 | `401` | Refresh token invalide ou expiré |
 
 ---
@@ -139,7 +139,8 @@ Obtient un nouvel access token à partir d'un refresh token valide.
 Retourne le profil de l'utilisateur authentifié.
 
 **En-tête requis :**
-```
+
+```text
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 ```
 
@@ -202,9 +203,110 @@ Modifie le mot de passe de l'utilisateur authentifié.
 **Erreurs possibles :**
 
 | Code | Description |
-|---|---|
+| --- | --- |
 | `401` | Mot de passe actuel incorrect |
 | `422` | Nouveau mot de passe ne respecte pas les critères de sécurité |
+
+---
+
+### POST /auth/logo
+
+Upload du logo de votre programme. Le logo est stocké de façon isolée par programme et affiché dans la sidebar, l'avatar et les aperçus de cartes.
+
+**En-têtes requis :**
+
+```text
+Authorization: Bearer <VOTRE_TOKEN>
+Content-Type: multipart/form-data
+```
+
+**Corps (multipart) :**
+
+| Champ | Type | Description |
+| --- | --- | --- |
+| `file` | File | Image PNG, JPG, WebP ou SVG — max 2 Mo |
+
+**Exemple cURL :**
+
+```bash
+curl -X POST https://api.oomus.health/auth/logo \
+  -H "Authorization: Bearer <VOTRE_TOKEN>" \
+  -F "file=@logo_programme.png"
+```
+
+**Réponse 200 OK :** profil du programme mis à jour avec `logo_url` renseigné.
+
+**Erreurs possibles :**
+
+| Code | Description |
+| --- | --- |
+| `400` | Format de fichier non supporté ou taille > 2 Mo |
+| `401` | Token manquant ou invalide |
+
+---
+
+### GET /auth/logo/{programme_id}
+
+Sert le logo d'un programme. Endpoint public — aucune authentification requise.
+
+**Paramètre URL :**
+
+| Paramètre | Description |
+| --- | --- |
+| `programme_id` | UUID du programme |
+
+**Réponse 200 OK :** fichier image avec le `Content-Type` approprié (`image/png`, `image/jpeg`, etc.).
+
+**Réponse 404 :** aucun logo uploadé pour ce programme.
+
+---
+
+### POST /auth/2fa/setup
+
+Initialise l'authentification à deux facteurs TOTP pour le compte courant. Retourne un QR code à scanner avec Google Authenticator, Authy ou équivalent.
+
+**En-tête requis :** `Authorization: Bearer <VOTRE_TOKEN>`
+
+**Réponse 200 OK :**
+
+```json
+{
+  "secret": "JBSWY3DPEHPK3PXP",
+  "qr_code_url": "otpauth://totp/CampaignID%3Acontact%40programme.sn?secret=JBSWY3DPEHPK3PXP&issuer=OomusCampaignID"
+}
+```
+
+Affichez `qr_code_url` sous forme de QR code dans votre application, ou saisissez `secret` manuellement dans votre gestionnaire TOTP.
+
+---
+
+### POST /auth/2fa/verify
+
+Confirme l'activation du 2FA en soumettant le premier code TOTP généré par l'application. Le 2FA est activé uniquement après cette vérification.
+
+**Corps de la requête :**
+
+```json
+{
+  "code": "123456"
+}
+```
+
+**Réponse 200 OK :**
+
+```json
+{
+  "message": "Authentification à deux facteurs activée.",
+  "two_factor_enabled": true
+}
+```
+
+**Erreurs possibles :**
+
+| Code | Description |
+| --- | --- |
+| `400` | Code TOTP invalide ou expiré |
+| `401` | Token manquant ou invalide |
 
 ---
 
@@ -223,7 +325,7 @@ curl -X GET https://api.oomus.health/campaigns/ \
 
 ### Flux recommandé
 
-```
+```text
 1. Login → stocker access_token + refresh_token
 2. Utiliser access_token pour les requêtes
 3. Si réponse 401 (token expiré) :

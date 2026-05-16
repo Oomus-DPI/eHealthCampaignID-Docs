@@ -49,6 +49,7 @@ Le portail de vérification d'Oomus CampaignID est un artefact statique (HTML + 
 ### Intégration DHIS2 Tracker
 - Connexion directe à votre instance DHIS2 (v2.36+)
 - Synchronisation automatique des enrollments (cron configurable)
+- **7 templates DHIS2** dédiés : `vital`, `emerald`, `pulse`, `mothercare`, `shield`, `nomad`, `aero`
 - Mapping des attributs DHIS2 → champs de carte
 - Résolution MPI automatique lors de la synchronisation
 - Protection des données sensibles (garde IA — 7 catégories)
@@ -63,8 +64,35 @@ Le portail de vérification d'Oomus CampaignID est un artefact statique (HTML + 
 - Workflow d'approbation admin multi-niveaux
 - Génération de contrats (PDF, Excel, JSON/YAML)
 
+### Analytics IA & Prédictions (v5.0)
+- Prédictions 30 jours par régression linéaire client-side
+- Détection d'anomalies Z-score (seuil 2,2σ)
+- Score de santé programme 0–100 (composite succès/tendance/balance)
+- Projection dépenses et alerte solde insuffisant
+- Recommandations contextuelles rule-based
+
+### Administration globale (v5.0)
+- 6 pages admin cross-programmes : Analytics, Fraude, Campagnes, Jobs, PVC, MPI
+- Visualisations charts interactifs (BarChart, PieChart, AreaChart — Recharts)
+- Gestion des jobs avec annulation Celery en temps réel
+
+### Branding & Personnalisation (v5.1)
+
+- Logo programme dédié — upload PNG/JPG/WebP/SVG, max 2 Mo
+- Couleur primaire personnalisable, nom et slogan du programme
+- Logo affiché dans la sidebar, l'avatar et les aperçus de cartes
+- Chaque programme a son propre logo isolé en stockage
+
+### Interface adaptative (v5.1)
+
+- **Responsive mobile** : sidebar en tiroir overlay (< 900 px), header hamburger
+- **Mode sombre** : Paramètres → Préférences → Apparence — Clair / Sombre / Système
+- Persistance du thème en localStorage, changement instantané
+
 ### Sécurité et conformité
+
 - Authentification JWT + bcrypt, RBAC institutionnel
+- **2FA TOTP** : double authentification via application (Google Authenticator, Authy)
 - Chaîne d'audit immuable (SHA-256)
 - Détection d'anomalies par IA (IsolationForest)
 - Garde automatique des données sensibles (HIV, TB, biométrie, etc.)

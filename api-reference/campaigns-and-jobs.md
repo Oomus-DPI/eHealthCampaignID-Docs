@@ -321,6 +321,58 @@ wss://api.oomus.health/ws/jobs/{job_id}?token={access_token}
 
 ---
 
+## Facturation quota-aware
+
+### Logique de calcul du coût
+
+Avant chaque génération (Studio et DHIS2), la plateforme calcule automatiquement la part facturable du job en fonction du quota mensuel restant du programme.
+
+```text
+cartes_utilisées_ce_mois = total engine_usage_records (mois courant, tous moteurs)
+
+si cartes_utilisées < quota_mensuel :
+    cartes_gratuites  = quota_mensuel - cartes_utilisées
+    cartes_facturées  = max(0, card_count - cartes_gratuites)
+sinon :
+    cartes_facturées  = card_count
+
+coût = cartes_facturées × prix_par_carte_du_plan
+```
+
+Le quota est **partagé** entre le Card Studio et DHIS2 Tracker — c'est le total mensuel toutes sources qui détermine la facturation.
+
+### Prix par carte au-delà du quota
+
+| Plan | Studio (300 DPI) | Studio (600 DPI) | DHIS2 (300 DPI) | DHIS2 (≥ 450 DPI) |
+| --- | --- | --- | --- | --- |
+| Starter | 8 FCFA | 10 FCFA | 9 FCFA | 11 FCFA |
+| Regional Ops | 10 FCFA | 13 FCFA | 10 FCFA | 13 FCFA |
+| National Campaign | 12 FCFA | 15 FCFA | 15 FCFA | 18 FCFA |
+| Sovereign Enterprise | 15 FCFA | 19 FCFA | 20 FCFA | 24 FCFA |
+
+### Description de transaction
+
+La description de chaque transaction de génération indique explicitement la répartition :
+
+```text
+Génération — Campagne DKR-VAC — 2 000 cartes facturées @ 10 FCFA/carte (3 000 incluses dans le quota)
+```
+
+Ou, si 100 % dans le quota :
+
+```text
+Génération — Campagne DKR-VAC — 5 000 cartes (incluses dans le quota)
+```
+
+### Codes d'erreur spécifiques à la facturation
+
+| Code | Condition | Message |
+| --- | --- | --- |
+| `402` | Quota dépassé × 3 | "Quota mensuel très largement dépassé — veuillez passer à un plan supérieur" |
+| `402` | Solde insuffisant pour payer le dépassement | "Solde insuffisant. Coût estimé : X FCFA · Solde disponible : Y FCFA" |
+
+---
+
 ## Exemple complet : lancer une génération et suivre son statut
 
 ```bash

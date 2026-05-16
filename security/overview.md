@@ -21,6 +21,7 @@ Aucune information sensible (clés, mots de passe, tokens) n'est jamais stockée
 ### Validation stricte des fichiers
 
 Tous les fichiers uploadés (logos, templates) sont validés à plusieurs niveaux :
+
 - Vérification du type MIME (whitelist stricte)
 - Contrôle de la taille maximale
 - Analyse du contenu (pas d'exécutable déguisé)
@@ -45,9 +46,20 @@ Oomus CampaignID utilise des tokens **JWT (JSON Web Token)** avec algorithme **H
 ### Mots de passe
 
 Tous les mots de passe utilisateur sont hachés avec **bcrypt** :
+
 - Facteur de coût adapté aux recommandations NIST
 - Jamais stockés en clair, jamais loggés
 - Politique de complexité appliquée à la création et au changement
+
+### Authentification à deux facteurs (2FA TOTP)
+
+Chaque compte peut activer la **double authentification TOTP** depuis **Paramètres → Sécurité** :
+
+1. Scanner le QR code avec Google Authenticator, Authy ou tout autre gestionnaire TOTP
+2. Saisir le code à 6 chiffres pour confirmer l'activation
+3. À chaque connexion ultérieure, le code temporaire est demandé après le mot de passe
+
+L'algorithme utilisé est **TOTP (RFC 6238)** — codes à 6 chiffres, valides 30 secondes.
 
 ### Sessions concurrentes
 
@@ -62,7 +74,7 @@ Oomus CampaignID implémente un contrôle d'accès basé sur les rôles (**RBAC*
 ### Rôles standard
 
 | Rôle | Description | Droits |
-|---|---|---|
+| --- | --- | --- |
 | `super_admin` | Administrateur global de la plateforme | Accès complet à tous les programmes et la configuration système |
 | `programme_admin` | Administrateur d'un programme | Gestion complète de son programme (campagnes, utilisateurs, configuration) |
 | `programme_user` | Utilisateur opérationnel | Consultation, lancement de jobs, distribution — pas de configuration |
@@ -70,6 +82,7 @@ Oomus CampaignID implémente un contrôle d'accès basé sur les rôles (**RBAC*
 ### Rôles personnalisés
 
 Sur les plans National Campaign et Sovereign Enterprise, des rôles personnalisés peuvent être créés avec des permissions granulaires sur :
+
 - La gestion des campagnes (lecture / création / modification / suppression)
 - La génération de cartes (lancement, annulation)
 - La distribution (lecture, exécution)
@@ -91,7 +104,7 @@ Toutes les actions significatives réalisées sur la plateforme sont enregistré
 ### Ce qui est enregistré
 
 | Événement | Données enregistrées |
-|---|---|
+| --- | --- |
 | Connexion utilisateur | Acteur, IP source, timestamp, succès/échec |
 | Création / modification de campagne | Acteur, action, données modifiées |
 | Lancement de job de génération | Acteur, campagne, volume, DPI |
