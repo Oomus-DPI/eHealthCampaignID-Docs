@@ -19,46 +19,36 @@ Retourne le solde et les quotas du compte authentifié.
   "plan": "regional_ops",
   "plan_display_name": "Regional Ops",
   "balance_fcfa": 45000,
-  "monthly_subscription_fcfa": 250000,
+  "monthly_subscription_fcfa": 75000,
+  "price_per_card_fcfa": 8,
   "quota": {
-    "studio_print_total": 50000,
-    "studio_print_used": 12300,
-    "studio_print_remaining": 37700,
     "beneficiaries_total": 100000,
     "beneficiaries_used": 23450,
     "beneficiaries_remaining": 76550,
-    "sms_total": 300000,
+    "sms_total": 500000,
     "sms_used": 12300,
-    "sms_remaining": 287700,
-    "whatsapp_total": 50000,
+    "sms_remaining": 487700,
+    "whatsapp_total": 100000,
     "whatsapp_used": 4500,
-    "whatsapp_remaining": 45500,
-    "storage_gb_total": 100,
+    "whatsapp_remaining": 95500,
+    "storage_gb_total": 50,
     "storage_gb_used": 3.2,
-    "storage_gb_remaining": 96.8
-  },
-  "overage_pricing": {
-    "studio_card_fcfa": 10,
-    "dhis2_card_fcfa": 10,
-    "quality_surcharge_600dpi_fcfa": 3,
-    "sms_fcfa": 12,
-    "whatsapp_fcfa": 16
+    "storage_gb_remaining": 46.8
   },
   "quota_reset_date": "2026-06-01T00:00:00Z",
+  "overage_price_per_beneficiary_fcfa": 15,
   "currency": "XOF"
 }
 ```
 
 | Champ | Type | Description |
-| --- | --- | --- |
+|---|---|---|
 | `balance_fcfa` | integer | Crédit disponible en FCFA |
 | `monthly_subscription_fcfa` | integer | Montant de l'abonnement mensuel |
-| `quota.studio_print_total` | integer | Quota mensuel de cartes incluses (Studio + DHIS2 confondus) |
-| `quota.studio_print_used` | integer | Cartes générées ce mois (tous moteurs) |
-| `quota.studio_print_remaining` | integer | Cartes gratuites restantes ce mois |
-| `overage_pricing.studio_card_fcfa` | integer | Prix/carte Studio au-delà du quota |
-| `overage_pricing.dhis2_card_fcfa` | integer | Prix/carte DHIS2 au-delà du quota |
-| `overage_pricing.quality_surcharge_600dpi_fcfa` | integer | Surcharge par carte en 600 DPI |
+| `price_per_card_fcfa` | integer | Prix unitaire par carte générée |
+| `quota.beneficiaries_total` | integer | Quota mensuel total de bénéficiaires |
+| `quota.beneficiaries_used` | integer | Bénéficiaires consommés ce mois |
+| `overage_price_per_beneficiary_fcfa` | integer | Prix par bénéficiaire en dépassement |
 
 ---
 
@@ -124,60 +114,46 @@ Retourne la liste des plans tarifaires disponibles.
     {
       "alias": "starter",
       "display_name": "Starter",
-      "monthly_price_fcfa": 100000,
-      "studio_print_quota": 3000,
-      "sp_price_per_card": 8,
-      "sp_dhis2_price": 9,
-      "sp_quality_surcharge": 2,
+      "monthly_price_fcfa": 25000,
       "beneficiaries_quota": 10000,
-      "sms_quota": 25000,
-      "whatsapp_quota": 5000,
-      "storage_gb": 20
+      "sms_quota": 50000,
+      "whatsapp_quota": 10000,
+      "storage_gb": 10,
+      "features": ["card_generation", "distribution", "mpi", "dhis2_basic"]
     },
     {
       "alias": "regional_ops",
       "display_name": "Regional Ops",
-      "monthly_price_fcfa": 250000,
-      "studio_print_quota": 50000,
-      "sp_price_per_card": 10,
-      "sp_dhis2_price": 10,
-      "sp_quality_surcharge": 3,
+      "monthly_price_fcfa": 75000,
       "beneficiaries_quota": 100000,
-      "sms_quota": 300000,
-      "whatsapp_quota": 50000,
-      "storage_gb": 100
+      "sms_quota": 500000,
+      "whatsapp_quota": 100000,
+      "storage_gb": 50,
+      "features": ["card_generation", "distribution", "mpi", "dhis2_full", "rbac_3_levels"]
     },
     {
       "alias": "national_campaign",
       "display_name": "National Campaign",
-      "monthly_price_fcfa": 450000,
-      "studio_print_quota": 100000,
-      "sp_price_per_card": 12,
-      "sp_dhis2_price": 15,
-      "sp_quality_surcharge": 3,
+      "monthly_price_fcfa": 250000,
       "beneficiaries_quota": 1000000,
-      "sms_quota": 3000000,
-      "whatsapp_quota": 500000,
-      "storage_gb": 1000
+      "sms_quota": 5000000,
+      "whatsapp_quota": 1000000,
+      "storage_gb": 500,
+      "features": ["card_generation", "distribution", "mpi", "dhis2_full", "rbac_4_levels", "advanced_analytics", "enhanced_sla"]
     },
     {
       "alias": "sovereign_enterprise",
       "display_name": "Sovereign Enterprise",
       "monthly_price_fcfa": 750000,
-      "studio_print_quota": 0,
-      "sp_price_per_card": 15,
-      "sp_dhis2_price": 20,
-      "sp_quality_surcharge": 4,
       "beneficiaries_quota": 10000000,
-      "sms_quota": 30000000,
-      "whatsapp_quota": 5000000,
-      "storage_gb": 10000
+      "sms_quota": 50000000,
+      "whatsapp_quota": 10000000,
+      "storage_gb": 5120,
+      "features": ["all_features", "sovereign_hosting", "dedicated_support", "critical_sla"]
     }
   ]
 }
 ```
-
-> `studio_print_quota: 0` (Sovereign Enterprise) signifie que le volume est personnalisé/négocié — toutes les cartes sont facturées au tarif du plan.
 
 ---
 

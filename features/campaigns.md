@@ -163,6 +163,25 @@ Chaque job de génération peut spécifier une résolution DPI indépendante :
 
 ---
 
+## Interface — Design healthcare mature (v5.7)
+
+Depuis la v5.7, la page Campagnes adopte un design clinique professionnel adapté aux institutions de santé :
+
+| Élément | Comportement |
+|---|---|
+| **Palette** | Fond `#060D1A` (navy profond), surfaces `#0C1628`, accent `#0EA5E9` (cyan médical) — palette unifiée `C` |
+| **KPI tiles** | 4 tuiles dans l'en-tête : Total programmes, En cours, Terminées, Cartes distribuées — chacune avec icône et radial glow |
+| **Sous-titre** | "Gérez vos programmes de distribution de cartes sanitaires" — identité produit santé |
+| **Badges de type** | 12 types de campagne avec icône Lucide contextuelle (Shield = CPS, Stethoscope = Prénatal, Microscope = Labo, Leaf = Agriculture…) et fond teinté |
+| **Statut** | Capsule pill avec fond teinté, point animé uniquement pour `generating` |
+| **Actions de ligne** | Toujours visibles à 35 % d'opacité (sans survol requis), pleine opacité au hover |
+| **En-tête table sticky** | Colonnes fixes au défilement, arrière-plan `rgba(255,255,255,0.018)` |
+| **Survol ligne** | Fond teinté cyan `rgba(14,165,233,0.03)` |
+| **Panneau de détail** | Bande colorée type en haut, info dans carte bordée, boutons d'action avec icônes colorées |
+| **État vide** | Icône Stethoscope cyan + texte santé contextualisé |
+
+---
+
 ## Gestion des campagnes multiples
 
 Un compte programme peut gérer un nombre illimité de campagnes simultanées (dans la limite du quota total de bénéficiaires du plan).

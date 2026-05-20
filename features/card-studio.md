@@ -92,16 +92,39 @@ Sur les modèles DHIS2 (vital/emerald/pulse), l'identifiant MPI s'affiche dans l
 
 ---
 
-## Aperçu PNG
+## Aperçu PNG — rendu serveur haute résolution
 
-Avant tout lancement de génération en masse, le Card Studio génère un **aperçu PNG en temps réel** de la carte finale :
+Le Card Studio intègre un moteur d'aperçu serveur qui produit le rendu **exact** de vos cartes avant tout lancement de génération en masse.
 
-1. Cliquez sur **"Aperçu PNG"** dans l'éditeur
-2. Le serveur génère une image PNG haute résolution de la carte recto/verso
-3. L'aperçu est affiché directement dans le navigateur
-4. Téléchargez l'aperçu pour validation interne ou approbation institutionnelle
+### Depuis le panneau Export — section "Aperçu recto + verso"
 
-L'aperçu utilise des données fictives représentatives. Il reflète exactement le rendu final à la DPI choisie.
+1. Dans le panneau latéral, naviguez jusqu'à **Export**
+2. La section **"Aperçu recto + verso"** affiche un placeholder en pointillés si aucun aperçu n'a encore été généré
+3. Cliquez **"Générer l'aperçu PNG"** — le serveur produit 1 recto + 1 verso à **450 DPI** en quelques secondes
+4. L'image s'affiche **inline** sur fond sombre, fidèle au rendu imprimeur
+5. Cliquez **"↓ PNG"** (en haut à droite de la section) pour télécharger l'aperçu
+6. Cliquez **"Regénérer"** après toute modification de design pour rafraîchir l'aperçu
+
+La section "Aperçu recto + verso" regroupe également les options d'export PDF (sélection 1–8 cartes, téléchargement PDF haute résolution).
+
+### Depuis le Rapport de design
+
+1. Dans **Canvas → Actions rapides**, cliquez **"Rapport de design"**
+2. Le rapport s'ouvre **et** déclenche simultanément la génération de l'aperçu PNG
+3. Dans la section **"Aperçu des cartes générées"** du rapport, l'image haute résolution remplace les miniatures CSS dès qu'elle est disponible
+4. Si l'aperçu n'est pas encore prêt, un bouton **"Générer l'aperçu PNG"** est disponible directement dans le rapport sans devoir le fermer
+
+### Caractéristiques du rendu serveur
+
+| Paramètre | Valeur |
+| --- | --- |
+| Résolution | 450 DPI (render_scale ×2) |
+| Format | PNG lossless |
+| Contenu | 1 recto + 1 verso côte à côte |
+| Données | Fictives représentatives (code préfixe + 8 caractères aléatoires) |
+| Temps de génération | 5–15 secondes selon le type de carte |
+
+L'aperçu utilise le moteur serveur identique à la génération en masse — il reflète exactement le rendu final à la résolution choisie, y compris les gradients, logos, champs dynamiques et QR codes.
 
 ---
 

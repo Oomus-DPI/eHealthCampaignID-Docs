@@ -183,21 +183,44 @@ Le résultat : chaque enrollment DHIS2 est lié à l'identité MPI souveraine co
 
 ## Génération de cartes depuis DHIS2
 
-### 7 modèles DHIS2 dédiés (v5.0)
+### 10 modèles DHIS2 disponibles
 
-Oomus CampaignID propose 7 modèles de cartes optimisés pour les données DHIS2 :
+Oomus CampaignID propose **10 modèles** de cartes haute résolution pour les données DHIS2 :
 
-| Modèle | Nom | Palette | Usage typique |
-|---|---|---|---|
-| `vital` | Vital Card | Bleu médical | Carte de santé essentielle, champs minimaux |
-| `emerald` | Emerald Card | Vert santé | Carte intermédiaire avec champs programme |
-| `pulse` | Pulse Card | Dark professionnel | Carte complète avec QR, MPI et données étendues |
-| `mothercare` | Mothercare Card | Rose/teal maternité | Suivi prénatal, vaccination mère-enfant |
-| `shield` | Shield Card | Bleu royal protection | Protection sociale, assurance, droits sociaux |
-| `nomad` | Nomad Card | Ocre/terre pastoral | Élevage, populations pastorales, santé rurale |
-| `aero` | Aero Card | Bleu ciel aérien | Vaccination renforcée, campagnes terrain |
+| Modèle | Palette | Description |
+|---|---|---|
+| `vital` | Bleu médical / cyan | Carte de santé essentielle, champs minimaux |
+| `emerald` | Vert forêt / émeraude | Carte intermédiaire avec champs programme |
+| `pulse` | Dark navy / cyan néon | Carte complète avec QR, MPI et données étendues |
+| `mothercare` | Rose / teal | Suivi prénatal et vaccination mère-enfant |
+| `shield` | Slate / or | Protection sociale et droits sociaux |
+| `nomad` | Noir / orange | Élevage et populations pastorales, grand QR |
+| `aero` | Navy / ambre | Vaccination renforcée et campagnes terrain |
+| `horizon` | Indigo profond / bleu clair | Carte premium gradient horizontal |
+| `aurora` | Indigo / violet / rose | Programmes spécialisés, encoches perforées |
+| **`sovereign`** | **Navy sombre / or** | **DHIS2 Digital Pass — design boarding-pass identique au prévisualiseur interactif** |
 
-Tous les modèles incluent le **MPI ID souverain en pied de carte** (remplace le code-barres cosmétique) et le **QR chiffré AES-256** si `include_mpi_id: true`.
+#### Modèle `sovereign` — DHIS2 Digital Pass
+
+Le modèle `sovereign` reproduit exactement le composant `Dhis2BoardingCard` du prévisualiseur interactif :
+
+- **En-tête** : jusqu'à 3 logos + "DHIS2 DIGITAL PASS" (tout en majuscules) + "Identity Pass · eHealth Platform" + badge "Sovereign ID"
+- **Identifiant MPI** : label "MPI-ID" + valeur en gros caractères gras blancs
+- **Grille attributs** : 2 colonnes × 2 lignes (jusqu'à 4 attributs) sans chevauchement
+- **Zone QR** : fond noir profond, cadre à 4 crochets dorés, "SCAN TO VERIFY", identifiant TEI tronqué
+- **Séparateur** : tirets dorés avec losanges ornementaux haut/bas
+- **Pied** : nom du programme (majuscules) à gauche + date d'enrollment à droite
+- Fonds navy/or avec ellipses topographiques subtiles
+
+### Prévisualisation en temps réel — Onglet Card Design
+
+Avant de lancer la génération, l'onglet **Card Design** affiche un aperçu de la carte en **temps réel** :
+
+- L'aperçu se rafraîchit automatiquement 450 ms après chaque modification : template, couleur, logos, attributs sélectionnés, sous-titre, taille de titre
+- Fonctionne **hors connexion DHIS2** : des données fictives représentatives sont utilisées si aucun enrollment n'est disponible
+- Rendu à **300 DPI** via le même moteur serveur que la génération en masse
+- Indicateur de statut : cyan animé (chargement) → vert (prêt) → gris (aucun aperçu)
+- Cliquez **"Rafraîchir"** pour forcer une mise à jour manuelle
 
 ### Lancer la génération depuis DHIS2
 

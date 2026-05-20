@@ -1,5 +1,7 @@
 # Vue d'ensemble
 
+> **Version** : 5.6 · **Date** : 2026-05-19
+
 ## Vision
 
 Oomus CampaignID est né d'un constat simple : dans de nombreux pays d'Afrique subsaharienne et dans les pays à ressources limitées (PRFI), les systèmes de santé publique souffrent de trois lacunes majeures :
@@ -20,9 +22,11 @@ Chaque carte générée par Oomus CampaignID est :
 - Associée à un identifiant unique cryptographiquement sécurisé (CSPRNG Base36)
 - Signée par un QR code à jeton opaque (non réversible, basé SHA-256)
 - Vérifiable hors ligne via un portail statique téléchargeable
+- Vérifiable en ligne via la route publique `/verify?p=…&s=…` — sans authentification
 - Distribuable instantanément par WhatsApp, SMS ou Google Wallet
 
 ### Systèmes fragmentés → Identité MPI unifiée
+
 
 Le Master Patient Index (MPI) souverain permet à chaque citoyen de disposer d'un identifiant de santé numérique unique, utilisable à travers tous les programmes de santé. Un même bénéficiaire peut recevoir une carte de vaccination, une carte nutrition et une carte d'assurance maladie — tous reliés à la même identité souveraine, avec déduplication automatique.
 
@@ -39,6 +43,7 @@ Le portail de vérification d'Oomus CampaignID est un artefact statique (HTML + 
 - Jusqu'à 10 millions de bénéficiaires par programme
 - Options DPI : 300 dpi (standard), 450 dpi (amélioré), 600 dpi (impression PVC)
 - Export PDF (recto/verso) + archive ZIP + portail de vérification offline
+- **11 templates visuels** dont le nouveau template **Sovereign** (navy/or premium boarding pass)
 
 ### Card Studio — Éditeur visuel de modèles
 - 11 modèles prêts à l'emploi couvrant les principaux programmes de santé
@@ -49,10 +54,16 @@ Le portail de vérification d'Oomus CampaignID est un artefact statique (HTML + 
 ### Intégration DHIS2 Tracker
 - Connexion directe à votre instance DHIS2 (v2.36+)
 - Synchronisation automatique des enrollments (cron configurable)
-- **7 templates DHIS2** dédiés : `vital`, `emerald`, `pulse`, `mothercare`, `shield`, `nomad`, `aero`
 - Mapping des attributs DHIS2 → champs de carte
 - Résolution MPI automatique lors de la synchronisation
 - Protection des données sensibles (garde IA — 7 catégories)
+
+### Sovereign Wallet
+- Passes digitaux signés HMAC-SHA256 — vérifiables hors ligne
+- Bundle offline chiffré XOR-SHA256 pour synchronisation sur appareil
+- Gestion multi-appareils avec historique de synchronisation
+- Révocation auditée et horodatée
+- Portail public de vérification de pass : `/verify?p=<payload>&s=<sig>`
 
 ### Distribution multicanal
 - **WhatsApp** : Meta Graph API v25.0 — image de carte + message personnalisé
@@ -64,35 +75,22 @@ Le portail de vérification d'Oomus CampaignID est un artefact statique (HTML + 
 - Workflow d'approbation admin multi-niveaux
 - Génération de contrats (PDF, Excel, JSON/YAML)
 
-### Analytics IA & Prédictions (v5.0)
-- Prédictions 30 jours par régression linéaire client-side
-- Détection d'anomalies Z-score (seuil 2,2σ)
-- Score de santé programme 0–100 (composite succès/tendance/balance)
-- Projection dépenses et alerte solde insuffisant
-- Recommandations contextuelles rule-based
+### Panneau Admin v5.6 — Gouvernance complète
+Le panneau d'administration offre une gestion opérationnelle complète de la plateforme :
 
-### Administration globale (v5.0)
-- 6 pages admin cross-programmes : Analytics, Fraude, Campagnes, Jobs, PVC, MPI
-- Visualisations charts interactifs (BarChart, PieChart, AreaChart — Recharts)
-- Gestion des jobs avec annulation Celery en temps réel
-
-### Branding & Personnalisation (v5.1)
-
-- Logo programme dédié — upload PNG/JPG/WebP/SVG, max 2 Mo
-- Couleur primaire personnalisable, nom et slogan du programme
-- Logo affiché dans la sidebar, l'avatar et les aperçus de cartes
-- Chaque programme a son propre logo isolé en stockage
-
-### Interface adaptative (v5.1)
-
-- **Responsive mobile** : sidebar en tiroir overlay (< 900 px), header hamburger
-- **Mode sombre** : Paramètres → Préférences → Apparence — Clair / Sombre / Système
-- Persistance du thème en localStorage, changement instantané
+| Section admin | Capacités |
+|---|---|
+| **Intégration DHIS2** | Gestion configs, toggle actif/inactif, sync manuelle, consultation enrollments |
+| **Portails Vérification** | Création, statut, suppression des portails de vérification dédiés |
+| **Analytics Plateforme** | KPIs globaux, taux de succès, top programmes par volume de cartes |
+| **Détection Fraude IA** | Alertes IsolationForest, filtres par risque, répartition par type, dismiss |
+| **Toutes les Campagnes** | Vue globale multi-programmes, filtres status/type/recherche, suppression |
+| **Jobs de Génération** | Stats workers Celery, filtre statut, annulation de jobs actifs |
+| **Commandes PVC** | Suivi fabrication et livraison, transitions de statut, saisie N° de suivi |
+| **Registre MPI Souverain** | Stats globales, liste paginée, détail identité, vérification manuelle |
 
 ### Sécurité et conformité
-
 - Authentification JWT + bcrypt, RBAC institutionnel
-- **2FA TOTP** : double authentification via application (Google Authenticator, Authy)
 - Chaîne d'audit immuable (SHA-256)
 - Détection d'anomalies par IA (IsolationForest)
 - Garde automatique des données sensibles (HIV, TB, biométrie, etc.)
@@ -125,26 +123,26 @@ Le portail de vérification d'Oomus CampaignID est un artefact statique (HTML + 
 | Identification réfugiés | Carte d'identité humanitaire | SMS + hors ligne |
 | Santé agricole | Carte agriculteur / santé rurale | SMS |
 | Laboratoire | Carte de résultats (lab) | WhatsApp |
-| Identité nationale santé | Carte d'identité sanitaire | Google Wallet |
+| Identité nationale santé | Carte d'identité sanitaire souveraine | Google Wallet + Sovereign Wallet |
 
 ---
 
 ## Architecture de haut niveau
 
 ```
-┌─────────────────────────────────────────────────────┐
-│                   Oomus CampaignID                  │
-├──────────────┬──────────────────┬───────────────────┤
-│  Card Studio │  Campaign Engine │  MPI Sovereign    │
-│  (11 modèles)│  (Celery async)  │  Identity         │
-├──────────────┴──────────────────┴───────────────────┤
-│              DHIS2 Tracker Integration               │
-├──────────────┬──────────────────┬───────────────────┤
-│  WhatsApp    │  SMS (Orange)    │  Google Wallet    │
-│  (Meta v25)  │  (OAuth2)        │  (Generic Pass)   │
-├──────────────┴──────────────────┴───────────────────┤
-│  Verification Portal (Offline) │  HL7 FHIR R4       │
-└─────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────┐
+│                       Oomus CampaignID v5.6                      │
+├──────────────┬──────────────────┬───────────────────┬────────────┤
+│  Card Studio │  Campaign Engine │  MPI Sovereign    │  Admin v5.4│
+│  (11 modèles)│  (Celery async)  │  Identity         │  (8 pages) │
+├──────────────┴──────────────────┴───────────────────┴────────────┤
+│              DHIS2 Tracker Integration (safe read-only guard)     │
+├──────────────┬──────────────────┬───────────────────┬────────────┤
+│  WhatsApp    │  SMS (Orange)    │  Google Wallet    │  Sovereign │
+│  (Meta v25)  │  (OAuth2)        │  (Generic Pass)   │  Wallet    │
+├──────────────┴──────────────────┴───────────────────┴────────────┤
+│  Verify Portal (Offline + /verify public) │  HL7 FHIR R4         │
+└──────────────────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -154,3 +152,4 @@ Le portail de vérification d'Oomus CampaignID est un artefact statique (HTML + 
 - [Démarrage rapide](quick-start.md) — Créez votre première campagne en 5 étapes
 - [Plans & Tarification](plans-and-pricing.md) — Choisissez le plan adapté à votre programme
 - [Identité MPI souveraine](../features/mpi-sovereign-identity.md) — Comprendre le système d'identité numérique
+- [Modules Enterprise v5.2+](../features/enterprise-modules.md) — AI, Geo, Trust Score, Sovereign Wallet

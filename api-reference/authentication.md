@@ -9,7 +9,7 @@ Oomus CampaignID utilise une authentification **JWT (JSON Web Token)** basée su
 ## Durée de vie des tokens
 
 | Token | Durée de validité |
-| --- | --- |
+|---|---|
 | **Access token** | 30 minutes |
 | **Refresh token** | 30 jours |
 
@@ -52,7 +52,7 @@ Crée un nouveau compte programme.
 **Erreurs possibles :**
 
 | Code | Description |
-| --- | --- |
+|---|---|
 | `400` | Corps de requête invalide (champs manquants, format incorrect) |
 | `409` | Un compte avec cette adresse e-mail existe déjà |
 | `422` | Erreur de validation (mot de passe trop faible, e-mail invalide) |
@@ -86,7 +86,7 @@ Authentifie un utilisateur et retourne les tokens JWT.
 **Erreurs possibles :**
 
 | Code | Description |
-| --- | --- |
+|---|---|
 | `401` | Identifiants incorrects |
 | `403` | Compte désactivé |
 | `422` | Format de la requête invalide |
@@ -129,7 +129,7 @@ Obtient un nouvel access token à partir d'un refresh token valide.
 **Erreurs possibles :**
 
 | Code | Description |
-| --- | --- |
+|---|---|
 | `401` | Refresh token invalide ou expiré |
 
 ---
@@ -139,8 +139,7 @@ Obtient un nouvel access token à partir d'un refresh token valide.
 Retourne le profil de l'utilisateur authentifié.
 
 **En-tête requis :**
-
-```text
+```
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 ```
 
@@ -150,15 +149,24 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 {
   "id": "usr_01HXYZ123ABC",
   "email": "contact@programme-sante.sn",
-  "full_name": "Programme National de Vaccination",
-  "organization": "Ministère de la Santé du Sénégal",
+  "name": "Programme National de Vaccination",
+  "country": "Sénégal",
+  "phone": "+221XXXXXXXXX",
   "role": "programme_admin",
   "plan": "starter",
-  "is_active": true,
-  "created_at": "2026-05-15T09:00:00Z",
-  "last_login": "2026-05-15T09:00:00Z"
+  "status": "active",
+  "balance_fcfa": 125000,
+  "cards_generated": 4800,
+  "is_admin": false,
+  "permissions": [],
+  "two_factor_enabled": false,
+  "logo_url": "data:image/png;base64,iVBORw0K...",
+  "created_at": "2026-05-15T09:00:00Z"
 }
 ```
+
+> **`logo_url`** — Data URI base64 du logo programme (`data:{type};base64,{b64}`), stocké directement en base. `null` si aucun logo uploadé.
+> **`two_factor_enabled`** — `true` si la 2FA TOTP est activée sur ce compte.
 
 ---
 
@@ -192,121 +200,111 @@ Modifie le mot de passe de l'utilisateur authentifié.
 }
 ```
 
-**Réponse 200 OK :**
-
-```json
-{
-  "message": "Mot de passe modifié avec succès."
-}
-```
+**Réponse 204 No Content** (succès silencieux)
 
 **Erreurs possibles :**
 
 | Code | Description |
-| --- | --- |
-| `401` | Mot de passe actuel incorrect |
-| `422` | Nouveau mot de passe ne respecte pas les critères de sécurité |
+|---|---|
+| `400` | Mot de passe actuel incorrect ou nouveau mot de passe identique à l'ancien |
 
 ---
 
 ### POST /auth/logo
 
-Upload du logo de votre programme. Le logo est stocké de façon isolée par programme et affiché dans la sidebar, l'avatar et les aperçus de cartes.
+Upload le logo du programme (PNG / JPEG / WEBP, max 512 KB). Le logo est encodé en base64 et stocké en base de données dans `logo_url`. Il est automatiquement renvoyé dans `ProgrammeOut` (GET /auth/me) et affiché dans la sidebar et le profil.
 
-**En-têtes requis :**
-
-```text
-Authorization: Bearer <VOTRE_TOKEN>
-Content-Type: multipart/form-data
-```
-
-**Corps (multipart) :**
+**Content-Type :** `multipart/form-data`
 
 | Champ | Type | Description |
-| --- | --- | --- |
-| `file` | File | Image PNG, JPG, WebP ou SVG — max 2 Mo |
+|---|---|---|
+| `file` | `File` | Image PNG, JPEG ou WEBP (≤ 512 KB) |
 
-**Exemple cURL :**
-
-```bash
-curl -X POST https://api.oomus.health/auth/logo \
-  -H "Authorization: Bearer <VOTRE_TOKEN>" \
-  -F "file=@logo_programme.png"
-```
-
-**Réponse 200 OK :** profil du programme mis à jour avec `logo_url` renseigné.
+**Réponse 200 OK :** profil complet mis à jour (même schéma que GET /auth/me, avec `logo_url` renseigné)
 
 **Erreurs possibles :**
 
 | Code | Description |
-| --- | --- |
-| `400` | Format de fichier non supporté ou taille > 2 Mo |
-| `401` | Token manquant ou invalide |
+|---|---|
+| `400` | Format de fichier non supporté (seuls PNG/JPEG/WEBP acceptés) |
+| `413` | Image trop volumineuse (max 512 KB) |
 
 ---
 
-### GET /auth/logo/{programme_id}
+## Authentification à deux facteurs (2FA TOTP)
 
-Sert le logo d'un programme. Endpoint public — aucune authentification requise.
-
-**Paramètre URL :**
-
-| Paramètre | Description |
-| --- | --- |
-| `programme_id` | UUID du programme |
-
-**Réponse 200 OK :** fichier image avec le `Content-Type` approprié (`image/png`, `image/jpeg`, etc.).
-
-**Réponse 404 :** aucun logo uploadé pour ce programme.
-
----
+La 2FA est basée sur le standard TOTP (RFC 6238 — Time-based One-Time Password), compatible avec Google Authenticator, Authy et tout client TOTP standard.
 
 ### POST /auth/2fa/setup
 
-Initialise l'authentification à deux facteurs TOTP pour le compte courant. Retourne un QR code à scanner avec Google Authenticator, Authy ou équivalent.
-
-**En-tête requis :** `Authorization: Bearer <VOTRE_TOKEN>`
+Génère un nouveau secret TOTP et retourne l'URI de provisioning pour le scan QR.
 
 **Réponse 200 OK :**
 
 ```json
 {
-  "secret": "JBSWY3DPEHPK3PXP",
-  "qr_code_url": "otpauth://totp/CampaignID%3Acontact%40programme.sn?secret=JBSWY3DPEHPK3PXP&issuer=OomusCampaignID"
+  "secret": "BASE32SECRETHERE",
+  "provisioning_uri": "otpauth://totp/OOMUS%20DPI:contact%40programme.sn?secret=BASE32SECRETHERE&issuer=OOMUS%20DPI"
 }
 ```
 
-Affichez `qr_code_url` sous forme de QR code dans votre application, ou saisissez `secret` manuellement dans votre gestionnaire TOTP.
+Le secret retourné doit être transmis à `POST /auth/2fa/verify-setup` pour activer la 2FA. Il n'est pas encore enregistré en base à ce stade.
 
 ---
 
-### POST /auth/2fa/verify
+### POST /auth/2fa/verify-setup
 
-Confirme l'activation du 2FA en soumettant le premier code TOTP généré par l'application. Le 2FA est activé uniquement après cette vérification.
+Vérifie le code TOTP saisi et active la 2FA sur le compte.
 
 **Corps de la requête :**
 
 ```json
 {
+  "secret": "BASE32SECRETHERE",
   "code": "123456"
 }
 ```
 
-**Réponse 200 OK :**
-
-```json
-{
-  "message": "Authentification à deux facteurs activée.",
-  "two_factor_enabled": true
-}
-```
+**Réponse 200 OK :** profil mis à jour avec `two_factor_enabled: true`
 
 **Erreurs possibles :**
 
 | Code | Description |
-| --- | --- |
-| `400` | Code TOTP invalide ou expiré |
-| `401` | Token manquant ou invalide |
+|---|---|
+| `400` | Code TOTP invalide (code expiré, mauvais secret) |
+| `501` | Module `pyotp` non installé (backend) |
+
+---
+
+### DELETE /auth/2fa/disable
+
+Désactive la 2FA sur le compte. Le `totp_secret` est effacé et `two_factor_enabled` passe à `false`.
+
+**Réponse 200 OK :** profil mis à jour avec `two_factor_enabled: false`
+
+---
+
+### POST /auth/2fa/login
+
+Deuxième étape d'authentification lorsque la 2FA est activée. À appeler après une connexion `POST /auth/login` réussie, en fournissant le code TOTP courant.
+
+**Corps de la requête :**
+
+```json
+{
+  "email": "contact@programme-sante.sn",
+  "code": "123456"
+}
+```
+
+**Réponse 200 OK :** tokens JWT (même schéma que `POST /auth/login`)
+
+**Erreurs possibles :**
+
+| Code | Description |
+|---|---|
+| `400` | 2FA non configurée sur ce compte |
+| `401` | Code TOTP invalide |
 
 ---
 
@@ -325,7 +323,7 @@ curl -X GET https://api.oomus.health/campaigns/ \
 
 ### Flux recommandé
 
-```text
+```
 1. Login → stocker access_token + refresh_token
 2. Utiliser access_token pour les requêtes
 3. Si réponse 401 (token expiré) :

@@ -2,11 +2,13 @@
 
 **Infrastructure souveraine de santé publique numérique pour les programmes nationaux en Afrique et dans les pays à ressources limitées.**
 
+> **Version** : 5.6 · **Date** : 2026-05-19 · **Statut** : Production
+
 ---
 
 ## Bienvenue sur la documentation officielle
 
-Oomus CampaignID est une plateforme GovTech Enterprise SaaS (v5.1) conçue pour la génération, la distribution, la vérification et la gouvernance de cartes d'identité sanitaire numériques sécurisées. Elle repose sur une identité numérique MPI (Master Patient Index) souveraine, interopérable HL7 FHIR R4, et pensée pour fonctionner dans des environnements à faible connectivité.
+Oomus CampaignID est une plateforme GovTech Enterprise SaaS conçue pour la génération, la distribution, la vérification et la gouvernance de cartes d'identité sanitaire numériques sécurisées. Elle repose sur une identité numérique MPI (Master Patient Index) souveraine, interopérable HL7 FHIR R4, et pensée pour fonctionner dans des environnements à faible connectivité.
 
 ---
 
@@ -20,22 +22,27 @@ Oomus CampaignID permet aux programmes de santé nationaux et aux organisations 
 - **Déduplicater** automatiquement les identités grâce au moteur MPI probabiliste
 - **Synchroniser** les données depuis DHIS2 Tracker en temps réel ou selon un calendrier configurable
 - **Gouverner** les accès, les quotas et les approbations grâce à un système RBAC institutionnel complet
+- **Émettre** des Sovereign Wallet Passes — passes digitaux signés HMAC-SHA256, synchronisables hors ligne
+- **Administrer** la plateforme entière depuis un panneau admin unifié (8 sections de gouvernance)
 
 ---
 
 ## Capacités clés
 
-- **Card Studio** — Éditeur visuel avec 11 modèles de cartes, aperçu PNG, export YAML/JSON, options DPI 300/450/600
+- **Card Studio** — Éditeur visuel avec 11 modèles de cartes dont le nouveau template **Sovereign** (navy/or premium), aperçu PNG, export YAML/JSON, options DPI 300/450/600
 - **Identité MPI souveraine** — 1 citoyen = 1 identifiant de santé numérique, inter-programmes, à vie
-- **Intégration DHIS2** — Synchronisation automatique, 7 templates de cartes (vital/emerald/pulse/mothercare/shield/nomad/aero), génération depuis les enrollments
+- **Intégration DHIS2** — Synchronisation automatique, mapping d'attributs, génération de cartes depuis les enrollments, guard IA données sensibles
 - **Distribution multicanal** — WhatsApp (Meta Graph API v25.0), SMS (Orange API), Google Wallet
 - **Vérification hors ligne** — Portail statique, registre SHA-256, WebCrypto, multilingue (FR/EN/WO)
+- **Portail de vérification public** — Route standalone `/verify?p=…&s=…` — vérification QR depuis n'importe quel appareil sans authentification
+- **Sovereign Wallet** — Passes digitaux signé HMAC-SHA256, bundle offline XOR-SHA256, sync appareils, révocation auditée
 - **Moteur de simulation** — Estimation proforma, workflow d'approbation admin, génération de contrats
-- **Dashboard opérationnel** — KPIs temps réel, analytics IA (prédictions 30j, anomalies, score santé), alertes
-- **Administration globale** — 6 pages admin cross-programmes (analytics, fraude, campagnes, jobs, PVC, MPI) avec charts interactifs
-- **Sécurité enterprise** — AES-256-GCM, chaîne d'audit immuable, 2FA TOTP, détection d'anomalies IA, garde données sensibles
-- **Branding programme** — Logo personnalisé par programme, couleur primaire, nom affiché — persistés en base et affichés dans toute l'interface
-- **Interface adaptative** — Responsive mobile (< 900 px : sidebar tiroir, header hamburger), mode sombre natif (Paramètres → Préférences)
+- **Dashboard opérationnel** — KPIs temps réel, analytics avancées, santé de l'infrastructure, alertes
+- **Panneau admin v5.4** — 8 pages de gouvernance complètes : DHIS2, Portails Vérif., Analytics, Fraude IA, Campagnes, Jobs, PVC, MPI
+- **UI mature v5.6** — Page Campagnes (table épurée, pas d'affichage des coûts sauf dépassement quota) et page Connexion redesignées avec une esthétique professionnelle sobre
+- **Logo programme persistant** — Upload `POST /auth/logo` sauvegarde le logo en base (data URI), profil latéral et sidebar affichent le logo réel du programme
+- **Authentification 2FA** — Endpoints TOTP alignés : `two_factor_enabled` / `totp_secret` correctement exposés dans `ProgrammeOut`
+- **Sécurité enterprise** — AES-256-GCM, chaîne d'audit immuable, IsolationForest, garde données sensibles
 
 ---
 
@@ -55,13 +62,12 @@ Oomus CampaignID permet aux programmes de santé nationaux et aux organisations 
 
 | Composant | Technologie |
 |---|---|
-| Frontend | Next.js 15 — responsive, dark mode, ThemeContext |
-| Backend | FastAPI 0.115 + SQLAlchemy 2 (async) |
-| Base de données | PostgreSQL 15+ (asyncpg) |
+| Frontend | Next.js 16.2.4 + React 19 + TypeScript 5 |
+| Backend | FastAPI 0.115 + Python 3.12 |
+| Base de données | PostgreSQL 16 + Alembic (migrations 0001–0005) |
 | Files de tâches | Celery 5 + Redis 7 |
-| Stockage fichiers | MinIO / S3-compatible (logos, PDFs, portails) |
+| Stockage fichiers | MinIO / S3-compatible |
 | Interopérabilité | HL7 FHIR R4 |
-| Authentification | JWT HS256 + 2FA TOTP |
 
 ---
 

@@ -190,7 +190,7 @@ Lance la génération de cartes pour les enrollments d'un programme DHIS2.
 | Champ | Type | Obligatoire | Description |
 |---|---|---|---|
 | `programme_uid` | string | Oui | UID du programme DHIS2 |
-| `template` | string | Oui | `vital`, `emerald`, ou `pulse` |
+| `template` | string | Oui | `vital`, `emerald`, `pulse`, `mothercare`, `shield`, `nomad`, `aero`, `horizon`, `aurora`, `sovereign` |
 | `dpi` | integer | Non | 300, 450 ou 600 (défaut : 300) |
 | `include_mpi_id` | boolean | Non | Inclure l'ID MPI sur la carte (défaut : `true`) |
 | `enrollment_filter` | object | Non | Filtres sur les enrollments à traiter |
@@ -242,7 +242,7 @@ Génère un aperçu PNG d'une carte avec les données réelles d'un enrollment D
 | Paramètre | Type | Obligatoire | Description |
 |---|---|---|---|
 | `enrollment_id` | string | Oui | UID de l'enrollment DHIS2 |
-| `template` | string | Oui | `vital`, `emerald`, ou `pulse` |
+| `template` | string | Oui | `vital`, `emerald`, `pulse`, `mothercare`, `shield`, `nomad`, `aero`, `horizon`, `aurora`, `sovereign` |
 | `dpi` | integer | Non | 300, 450 ou 600 (défaut : 300) |
 
 **Réponse 200 OK :** Image PNG (Content-Type: `image/png`)
