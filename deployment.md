@@ -1,6 +1,6 @@
 # Guide de déploiement
 
-> **Version** : 5.6 · **Date** : 2026-05-19
+> **Version** : 5.9 · **Date** : 2026-05-20
 
 Oomus CampaignID peut être déployé sur votre propre infrastructure (on-premises, cloud public ou hébergement souverain) ou utilisé en mode SaaS hébergé par Oomus.
 
@@ -98,10 +98,10 @@ curl http://localhost:8000/health
 
 ```env
 # ── Obligatoires en production ─────────────────────────────────
-SECRET_KEY=<openssl rand -hex 32>
+SECRET_KEY=<openssl rand -hex 64>          # min 64 chars en production
 DATABASE_URL=postgresql+asyncpg://user:pass@db:5432/campaignid
 ADMIN_EMAIL=admin@votre-organisation.sn
-ADMIN_PASSWORD=<mot de passe fort ≥ 16 chars>
+ADMIN_PASSWORD=<mot de passe fort ≥ 12 chars>   # sans valeur par défaut
 APP_ENV=production
 
 # ── QR Engine (HMAC + AES) ─────────────────────────────────────
@@ -109,16 +109,25 @@ QR_HMAC_SECRET=<openssl rand -hex 32>
 QR_AES_KEY=<openssl rand -hex 32>      # 32 bytes = AES-256
 
 # ── Celery / Redis ─────────────────────────────────────────────
-REDIS_URL=redis://:PASSWORD@redis:6379/0
-CELERY_BROKER_URL=redis://:PASSWORD@redis:6379/0
-CELERY_RESULT_BACKEND=redis://:PASSWORD@redis:6379/1
+REDIS_PASSWORD=<strong password>           # obligatoire (--requirepass)
+REDIS_URL=redis://:${REDIS_PASSWORD}@redis:6379/0
+CELERY_BROKER_URL=redis://:${REDIS_PASSWORD}@redis:6379/0
+CELERY_RESULT_BACKEND=redis://:${REDIS_PASSWORD}@redis:6379/1
+
+# ── MinIO (plus de défaut minioadmin) ──────────────────────────
+MINIO_ROOT_USER=<your_minio_user>
+MINIO_ROOT_PASSWORD=<strong password>
+
+# ── Flower (lié à 127.0.0.1) ──────────────────────────────────
+FLOWER_USER=<flower_admin>
+FLOWER_PASSWORD=<strong password>
 
 # ── Stockage ───────────────────────────────────────────────────
 STORAGE_BACKEND=s3              # ou "local"
 AWS_S3_BUCKET=campaignid-storage
 AWS_S3_REGION=eu-west-1
-AWS_ACCESS_KEY_ID=...
-AWS_SECRET_ACCESS_KEY=...
+AWS_ACCESS_KEY_ID=...           # sans valeur par défaut
+AWS_SECRET_ACCESS_KEY=...       # sans valeur par défaut
 
 # ── Frontend ───────────────────────────────────────────────────
 NEXT_PUBLIC_API_URL=https://api.votredomaine.sn
@@ -172,19 +181,27 @@ alembic revision --autogenerate -m "description_courte"
 
 ### Ce que vous devez impérativement faire
 
-- [ ] **SECRET_KEY** : générer avec `openssl rand -hex 32` — jamais hardcodé
+- [ ] **SECRET_KEY** : générer avec `openssl rand -hex 64` (min 64 chars) — jamais hardcodé
+- [ ] **ADMIN_PASSWORD** : minimum 12 caractères — aucune valeur par défaut, Docker refuse de démarrer sans elle
+- [ ] **REDIS_PASSWORD** : obligatoire — Redis configuré avec `--requirepass`
+- [ ] **MINIO_ROOT_USER / MINIO_ROOT_PASSWORD** : obligatoires — plus de défaut `minioadmin`
+- [ ] **FLOWER_USER / FLOWER_PASSWORD** : obligatoires — Flower lié à `127.0.0.1` uniquement
 - [ ] **QR_HMAC_SECRET** : clé dédiée pour la signature des QR — différente de SECRET_KEY
 - [ ] **QR_AES_KEY** : clé AES-256 pour le chiffrement des payloads QR
+- [ ] **APP_ENV=production** : masque `/docs`, `/redoc`, `/openapi.json`
 - [ ] **HTTPS/TLS** : Nginx + Let's Encrypt (renouvellement automatique)
 - [ ] **Pare-feu** : bloquer les ports PostgreSQL (5432), Redis (6379), MinIO (9000) sur Internet
 - [ ] **Variables d'environnement** : fichiers `.env.prod` jamais commités dans Git
-- [ ] **Mot de passe admin** : minimum 16 caractères, majuscule + chiffre + symbole
 - [ ] **Sauvegardes** : backup PostgreSQL quotidien chiffré, rétention 30 jours
 
 ### Ce que vous obtenez par défaut
 
 - **Rate limiting** sur `/auth/login` (10 req/min par IP)
-- **JWT HS256** avec expiration 480 min (access) / 30 jours (refresh)
+- **JWT HS256** avec expiration **8h** (access) / 30 jours (refresh) — algorithme fixé, token versioning
+- **Isolation réseau** — PostgreSQL et Redis sans port externe, MinIO et Flower liés à `127.0.0.1`
+- **CORS strict** — méthodes et headers explicitement listés, pas de wildcard
+- **Headers sécurité** — `Content-Security-Policy` + HSTS en production
+- **Uploads sécurisés** — noms de fichiers sanitisés avec suffixe UUID
 - **2FA TOTP** disponible pour chaque compte (Paramètres → Sécurité)
 - **RBAC** — isolation complète des données par programme
 - **Audit trail** immuable — toutes les actions significatives loggées
@@ -198,7 +215,9 @@ alembic revision --autogenerate -m "description_courte"
 
 ### Infrastructure
 
-- [ ] `SECRET_KEY` fort (≥ 32 chars hex, `openssl rand -hex 32`)
+- [ ] `SECRET_KEY` fort (≥ 64 chars hex, `openssl rand -hex 64`)
+- [ ] `ADMIN_PASSWORD` défini (min 12 chars, sans défaut)
+- [ ] `REDIS_PASSWORD`, `MINIO_ROOT_USER`, `MINIO_ROOT_PASSWORD`, `FLOWER_USER`, `FLOWER_PASSWORD` définis
 - [ ] `QR_HMAC_SECRET` et `QR_AES_KEY` générés séparément
 - [ ] `APP_ENV=production`
 - [ ] `CORS_ORIGINS` limité aux domaines production
@@ -239,6 +258,14 @@ curl https://mondomaine.sn/health
 ```
 
 ---
+
+## Nouveau dans la v5.9
+
+- **Durcissement sécurité complet** : isolation réseau Docker (PostgreSQL/Redis sans port externe, MinIO/Flower sur 127.0.0.1), nouvelles variables obligatoires (`REDIS_PASSWORD`, `MINIO_ROOT_USER/PASSWORD`, `FLOWER_USER/PASSWORD`), CORS strict, CSP header, HSTS, docs API masquées en production
+- **Access token réduit à 8h** : `ACCESS_TOKEN_EXPIRE_MINUTES=480` (était 1440)
+- **Token versioning JWT** : changement de mot de passe invalide tous les tokens existants
+- **Politique de mots de passe renforcée** : min 10 chars + complexité pour les utilisateurs ; min 12 chars pour l'admin
+- **Sovereign card `SovereignCardConfig`** : dataclass configurable (couleurs, font scale, max attributs), icône empreinte digitale, format 1011×375 px @ 300 DPI
 
 ## Nouveau dans la v5.6
 

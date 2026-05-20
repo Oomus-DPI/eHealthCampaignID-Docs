@@ -1,6 +1,6 @@
 # Vue d'ensemble
 
-> **Version** : 5.6 · **Date** : 2026-05-19
+> **Version** : 5.9 · **Date** : 2026-05-20
 
 ## Vision
 
@@ -43,7 +43,7 @@ Le portail de vérification d'Oomus CampaignID est un artefact statique (HTML + 
 - Jusqu'à 10 millions de bénéficiaires par programme
 - Options DPI : 300 dpi (standard), 450 dpi (amélioré), 600 dpi (impression PVC)
 - Export PDF (recto/verso) + archive ZIP + portail de vérification offline
-- **11 templates visuels** dont le nouveau template **Sovereign** (navy/or premium boarding pass)
+- **11 templates visuels** dont le template **Sovereign** (boarding-pass 1011×375 px @ 300 DPI, configurable via `SovereignCardConfig`, icône empreinte digitale)
 
 ### Card Studio — Éditeur visuel de modèles
 - 11 modèles prêts à l'emploi couvrant les principaux programmes de santé
@@ -90,7 +90,10 @@ Le panneau d'administration offre une gestion opérationnelle complète de la pl
 | **Registre MPI Souverain** | Stats globales, liste paginée, détail identité, vérification manuelle |
 
 ### Sécurité et conformité
-- Authentification JWT + bcrypt, RBAC institutionnel
+- Authentification JWT HS256 (algorithme fixé, token versioning) + bcrypt, RBAC institutionnel
+- Access token 8h, politique de mots de passe renforcée (10 chars + complexité)
+- Isolation réseau Docker : PostgreSQL/Redis sans port externe, MinIO/Flower sur 127.0.0.1
+- CORS strict, Content-Security-Policy, HSTS en production
 - Chaîne d'audit immuable (SHA-256)
 - Détection d'anomalies par IA (IsolationForest)
 - Garde automatique des données sensibles (HIV, TB, biométrie, etc.)
@@ -131,7 +134,7 @@ Le panneau d'administration offre une gestion opérationnelle complète de la pl
 
 ```
 ┌──────────────────────────────────────────────────────────────────┐
-│                       Oomus CampaignID v5.6                      │
+│                       Oomus CampaignID v5.9                      │
 ├──────────────┬──────────────────┬───────────────────┬────────────┤
 │  Card Studio │  Campaign Engine │  MPI Sovereign    │  Admin v5.4│
 │  (11 modèles)│  (Celery async)  │  Identity         │  (8 pages) │

@@ -194,6 +194,7 @@ Lance la génération de cartes pour les enrollments d'un programme DHIS2.
 | `dpi` | integer | Non | 300, 450 ou 600 (défaut : 300) |
 | `include_mpi_id` | boolean | Non | Inclure l'ID MPI sur la carte (défaut : `true`) |
 | `enrollment_filter` | object | Non | Filtres sur les enrollments à traiter |
+| `sovereign_config` | object | Non | Pour le template `sovereign` uniquement : `{"accent_hex": "#D4AF37", "bg_hex": "#0D1B2A", "bg_deep_hex": "#060E1A", "font_scale": 1.0, "max_attrs": 4}` |
 
 **Réponse 202 Accepted :**
 

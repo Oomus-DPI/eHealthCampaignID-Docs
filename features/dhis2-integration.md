@@ -202,14 +202,16 @@ Oomus CampaignID propose **10 modèles** de cartes haute résolution pour les do
 
 #### Modèle `sovereign` — DHIS2 Digital Pass
 
-Le modèle `sovereign` reproduit exactement le composant `Dhis2BoardingCard` du prévisualiseur interactif :
+Le modèle `sovereign` reproduit exactement le composant `Dhis2BoardingCard` du prévisualiseur interactif. Il a été entièrement redessiné en v5.9 :
 
-- **En-tête** : jusqu'à 3 logos + "DHIS2 DIGITAL PASS" (tout en majuscules) + "Identity Pass · eHealth Platform" + badge "Sovereign ID"
-- **Identifiant MPI** : label "MPI-ID" + valeur en gros caractères gras blancs
+- **Format** : 1011×375 px @ 300 DPI (ratio 480:178, boarding-pass horizontal)
+- **En-tête** : jusqu'à 3 logos + "DHIS2 DIGITAL PASS" (tout en majuscules) + "Identity Pass · eHealth Platform" — badge "Sovereign Id" supprimé
+- **Identifiant MPI** : label "MPI-ID" + icône empreinte digitale (8 crêtes) + valeur en gros caractères gras blancs
 - **Grille attributs** : 2 colonnes × 2 lignes (jusqu'à 4 attributs) sans chevauchement
 - **Zone QR** : fond noir profond, cadre à 4 crochets dorés, "SCAN TO VERIFY", identifiant TEI tronqué
 - **Séparateur** : tirets dorés avec losanges ornementaux haut/bas
 - **Pied** : nom du programme (majuscules) à gauche + date d'enrollment à droite
+- **Configurable** via `SovereignCardConfig` : champs `accent_hex`, `bg_hex`, `bg_deep_hex`, `font_scale`, `max_attrs`
 - Fonds navy/or avec ellipses topographiques subtiles
 
 ### Prévisualisation en temps réel — Onglet Card Design

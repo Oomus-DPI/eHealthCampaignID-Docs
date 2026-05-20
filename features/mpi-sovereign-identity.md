@@ -104,7 +104,7 @@ Jeton QR = SHA-256(mpi_id + campaign_prefix + server_secret)
 
 ## Identifiant MPI sur les cartes
 
-Pour les 10 modèles de cartes DHIS2 (vital / emerald / pulse / mothercare / shield / nomad / aero / horizon / aurora / sovereign), l'identifiant MPI souverain s'affiche dans le **pied de carte**, remplaçant le code-barre traditionnel. Le modèle `sovereign` affiche le MPI-ID de manière proéminente en gros caractères gras dans la zone identité (design boarding-pass).
+Pour les 10 modèles de cartes DHIS2 (vital / emerald / pulse / mothercare / shield / nomad / aero / horizon / aurora / sovereign), l'identifiant MPI souverain s'affiche dans le **pied de carte**, remplaçant le code-barre traditionnel. Le modèle `sovereign` affiche le MPI-ID de manière proéminente en gros caractères gras dans la zone identité (design boarding-pass 1011×375 px @ 300 DPI), accompagné d'une icône empreinte digitale (8 crêtes). La fonction `generate_dhis2_card_png()` accepte un paramètre optionnel `sovereign_config: Optional[SovereignCardConfig]` pour personnaliser les couleurs accent/fond, l'échelle de fonte et le nombre maximum d'attributs affichés.
 
 **Avantages par rapport au code-barre :**
 - Lisible par l'agent de santé (format humain)

@@ -27,7 +27,7 @@
 * [Health Trust Score](features/enterprise-modules.md#module-3--health-trust-score)
 * [Sovereign Wallet](features/enterprise-modules.md#module-4--sovereign-wallet)
 
-## Administration & Gouvernance v5.6
+## Administration & Gouvernance v5.9
 
 * [Panneau Admin — Vue d'ensemble](admin/overview.md)
 * [DHIS2 Intégration (admin)](admin/dhis2.md)

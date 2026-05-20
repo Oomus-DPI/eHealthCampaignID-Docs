@@ -64,11 +64,11 @@ curl -X POST https://api.oomus.health/auth/login \
   "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
   "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
   "token_type": "bearer",
-  "expires_in": 1800
+  "expires_in": 28800
 }
 ```
 
-> Conservez votre `access_token`. Il expire après **30 minutes**. Utilisez le `refresh_token` (valable **30 jours**) pour en obtenir un nouveau sans re-saisir vos identifiants.
+> Conservez votre `access_token`. Il expire après **8 heures**. Utilisez le `refresh_token` (valable **30 jours**) pour en obtenir un nouveau sans re-saisir vos identifiants.
 
 Dans tous les exemples suivants, remplacez `<VOTRE_TOKEN>` par la valeur de votre `access_token`.
 

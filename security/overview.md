@@ -38,16 +38,19 @@ Les environnements de développement, staging et production sont strictement iso
 
 Oomus CampaignID utilise des tokens **JWT (JSON Web Token)** avec algorithme **HS256** :
 
-- **Access token** : durée de vie de **30 minutes** — minimise le risque en cas de fuite
+- **Access token** : durée de vie de **8 heures** (`ACCESS_TOKEN_EXPIRE_MINUTES=480`) — réduit de 24h pour minimiser le risque en cas de fuite
 - **Refresh token** : durée de vie de **30 jours** — stocké sécurisement côté client
 - Rotation automatique des tokens à chaque rafraîchissement
+- **Algorithme fixé** dans `security.py` (pas lu depuis les settings) — prévient les attaques algorithm-confusion
+- **Token versioning** : champ `token_version` dans le payload JWT. Un changement de mot de passe incrémente la version et invalide immédiatement tous les tokens existants de l'utilisateur
 
 ### Mots de passe
 
 Tous les mots de passe utilisateur sont hachés avec **bcrypt** :
 - Facteur de coût adapté aux recommandations NIST
 - Jamais stockés en clair, jamais loggés
-- Politique de complexité appliquée à la création et au changement
+- **Politique de complexité renforcée** : minimum 10 caractères + au moins 1 majuscule + 1 minuscule + 1 chiffre + 1 caractère spécial (`!@#$%^&*()-_=+[]{}|;:,.<>?/~\``)
+- Compte administrateur : minimum 12 caractères, sans valeur par défaut
 
 ### Sessions concurrentes
 
@@ -123,10 +126,13 @@ Les opérations à fort impact nécessitent une approbation explicite :
 
 ## Protection des données en transit et au repos
 
-- **En transit** : HTTPS/TLS 1.3 recommandé pour toutes les communications (HTTP uniquement en développement local)
+- **En transit** : HTTPS/TLS 1.3 recommandé pour toutes les communications (HTTP uniquement en développement local). Headers `Strict-Transport-Security` (HSTS) activés en production.
 - **Au repos** : données stockées dans PostgreSQL avec chiffrement recommandé au niveau du volume
 - **Fichiers générés** : stockés dans MinIO/S3-compatible, accès via URLs signées à durée limitée
 - **Secrets de configuration** : gérés par variables d'environnement, jamais en base de données
+- **Isolation réseau** : PostgreSQL et Redis sans port externe exposé. MinIO et Flower accessibles uniquement depuis `127.0.0.1`.
+- **Uploads sécurisés** : noms de fichiers sanitisés avec suffixe UUID — prévient les attaques de type path traversal.
+- **Headers sécurité** : `Content-Security-Policy` ajouté sur toutes les réponses API. Documentation Swagger masquée en production (`APP_ENV=production`).
 
 ---
 
