@@ -27,15 +27,22 @@ Six indicateurs clés sont affichés en permanence en haut du tableau de bord :
 
 ---
 
-## Graphique d'activité — 12 mois
+## Graphique d'activité — Jan–Déc (année en cours)
 
-Le graphique principal affiche l'évolution sur les 12 derniers mois de trois séries :
+Le graphique principal affiche l'activité mensuelle de janvier à décembre de l'année en cours. Il comporte **quatre séries individuellement activables/désactivables** via les boutons de sélection :
 
-- **Jobs de génération** : nombre de jobs lancés par mois
-- **Cartes générées** : volume mensuel de cartes produites
-- **Synchronisations DHIS2** : nombre de synchronisations DHIS2 effectuées par mois
+| Série | Type | Axe | Couleur |
+| --- | --- | --- | --- |
+| **Cartes** | Aire (Area) | Gauche (volume) | Bleu |
+| **Studio** | Barres empilées | Gauche (volume) | Violet |
+| **DHIS2** | Barres empilées | Gauche (volume) | Teal |
+| **Succès %** | Ligne pointillée | Droite (0–100 %) | Vert |
 
-Le graphique permet d'identifier les pics d'activité (campagnes saisonnières, pointes de distribution) et de planifier les capacités futures.
+Cliquez sur chaque pill-bouton pour afficher ou masquer la série correspondante. Toutes les séries sont actives par défaut.
+
+Les mois futurs affichent zéro et le graphique reste visible même si aucune activité n'a encore été enregistrée.
+
+Le graphique permet d'identifier les pics d'activité (campagnes saisonnières, pointes de distribution) et de suivre la fiabilité opérationnelle (taux de succès mensuel).
 
 ---
 

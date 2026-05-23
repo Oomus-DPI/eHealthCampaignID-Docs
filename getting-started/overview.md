@@ -1,6 +1,6 @@
 # Vue d'ensemble
 
-> **Version** : 5.9 · **Date** : 2026-05-20
+> **Version** : 5.11 · **Date** : 2026-05-23
 
 ## Vision
 
@@ -64,6 +64,19 @@ Le portail de vérification d'Oomus CampaignID est un artefact statique (HTML + 
 - Gestion multi-appareils avec historique de synchronisation
 - Révocation auditée et horodatée
 - Portail public de vérification de pass : `/verify?p=<payload>&s=<sig>`
+
+### Configuration pays & devise
+
+Oomus CampaignID inclut un référentiel de **40 pays africains** regroupés en 4 régions, chacun associé à sa devise ISO 4217 :
+
+| Région | Pays couverts |
+|---|---|
+| **Afrique de l'Ouest** | Sénégal, Mali, Burkina Faso, Niger, Guinée, Côte d'Ivoire, Ghana, Togo, Bénin, Nigeria, et 5 autres |
+| **Afrique Centrale** | Cameroun, Tchad, RCA, RDC, République du Congo, Gabon |
+| **Afrique de l'Est** | Rwanda, Ouganda, Kenya, Tanzanie, Éthiopie, Somalie, et 3 autres |
+| **Afrique Australe** | Afrique du Sud, Zambie, Zimbabwe, Botswana, Namibie, et 4 autres |
+
+Sélectionner un pays dans les paramètres du programme remplit automatiquement la devise (XOF, XAF, NGN, KES, ZAR…). Les 21 devises uniques couvertes sont disponibles dans le menu Préférences.
 
 ### Distribution multicanal
 - **WhatsApp** : Meta Graph API v25.0 — image de carte + message personnalisé
@@ -134,7 +147,7 @@ Le panneau d'administration offre une gestion opérationnelle complète de la pl
 
 ```
 ┌──────────────────────────────────────────────────────────────────┐
-│                       Oomus CampaignID v5.9                      │
+│                       Oomus CampaignID v5.11                     │
 ├──────────────┬──────────────────┬───────────────────┬────────────┤
 │  Card Studio │  Campaign Engine │  MPI Sovereign    │  Admin v5.4│
 │  (11 modèles)│  (Celery async)  │  Identity         │  (8 pages) │
