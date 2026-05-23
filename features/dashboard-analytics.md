@@ -27,22 +27,46 @@ Six indicateurs clés sont affichés en permanence en haut du tableau de bord :
 
 ---
 
-## Graphique d'activité — Jan–Déc (année en cours)
+## Graphique d'activité — Data Intelligence
 
-Le graphique principal affiche l'activité mensuelle de janvier à décembre de l'année en cours. Il comporte **quatre séries individuellement activables/désactivables** via les boutons de sélection :
+Le graphique principal d'activité est un composant **"Data Intelligence"** multi-axes. Il affiche quatre courbes superposées avec filtres de période.
 
-| Série | Type | Axe | Couleur |
-| --- | --- | --- | --- |
-| **Cartes** | Aire (Area) | Gauche (volume) | Bleu |
-| **Studio** | Barres empilées | Gauche (volume) | Violet |
-| **DHIS2** | Barres empilées | Gauche (volume) | Teal |
-| **Succès %** | Ligne pointillée | Droite (0–100 %) | Vert |
+### Filtres de période
 
-Cliquez sur chaque pill-bouton pour afficher ou masquer la série correspondante. Toutes les séries sont actives par défaut.
+Trois boutons permettent de choisir la granularité temporelle :
 
-Les mois futurs affichent zéro et le graphique reste visible même si aucune activité n'a encore été enregistrée.
+| Filtre | Période couverte | Granularité |
+|---|---|---|
+| **Sem.** | 7 derniers jours | Journalier |
+| **Mois** | 30 derniers jours | Journalier |
+| **Année** | Janvier → décembre (année en cours) | Mensuel |
 
-Le graphique permet d'identifier les pics d'activité (campagnes saisonnières, pointes de distribution) et de suivre la fiabilité opérationnelle (taux de succès mensuel).
+### Quatre séries de courbes superposées
+
+Toutes les séries sont des courbes **Area** lisses qui se superposent. Chacune peut être activée ou désactivée individuellement via les toggles en haut du graphique :
+
+| Série | Type | Axe | Couleur | Source |
+| --- | --- | --- | --- | --- |
+| **Cartes** | Aire (Area) | Gauche (volume) | Bleu | Studio + DHIS2 cumulés |
+| **Studio** | Aire (Area) | Gauche (volume) | Violet | `GenerationJob.card_count` (DB) |
+| **DHIS2** | Aire (Area) | Gauche (volume) | Teal | `EngineUsageRecord` engine_mode=`studio_print` (DB) |
+| **Succès %** | Aire (Area, sans points) | Droite (0–100 %) | Vert | Jobs complétés / total |
+
+Une **ligne de référence** horizontale à 75 % est tracée en pointillés orange sur l'axe Succès % — seuil opérationnel cible.
+
+### Sources de données — garantie de fiabilité
+
+Les compteurs affichés proviennent exclusivement de la base de données persistante :
+
+- **Cartes Studio** : `SUM(GenerationJob.card_count WHERE status='completed')` — comptage exact des cartes réelles
+- **Cartes DHIS2** : `SUM(EngineUsageRecord.cards_generated WHERE engine_mode='studio_print')` — source de vérité DB (pas de TTL, contrairement au cache Redis)
+- Pas de donnée fictive ou seedée — le graphique affiche **0** si aucune activité réelle n'a eu lieu
+
+Les mois / jours futurs affichent zéro et le graphique reste visible même si aucune activité n'a encore été enregistrée.
+
+### Badge LIVE
+
+Un badge **● LIVE** vert est affiché dans l'en-tête du graphique pour indiquer que les données sont mises à jour en temps réel (toutes les 30 secondes).
 
 ---
 
@@ -172,4 +196,4 @@ Les données du dashboard peuvent être exportées :
 
 - [Gestion des campagnes](campaigns.md) — Voir le détail d'une campagne
 - [Moteur de simulation](simulation-engine.md) — Planifier un déploiement
-- [Plans & Tarification](../getting-started/plans-and-pricing.md) — Module Analytics avancées
+- [Plans & Fonctionnalités](../getting-started/plans-and-pricing.md) — Module Analytics avancées

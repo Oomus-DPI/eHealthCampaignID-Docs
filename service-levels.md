@@ -84,7 +84,7 @@ Les incidents sont classifiés en 4 niveaux de priorité :
 | **National Campaign** | Prioritaire | E-mail + ticketing | Jours ouvrables (7h–20h UTC) |
 | **Sovereign Enterprise** | Dédié | E-mail + téléphone + canal dédié | 24/7 |
 
-**Contact support** : support@oomus.health
+**Contact support** : ceo@oomus.org
 
 ---
 
@@ -134,6 +134,6 @@ Les objectifs de disponibilité et de temps de réponse ne s'appliquent pas dans
 
 ## Prochaines étapes
 
-- [Plans & Tarification](getting-started/plans-and-pricing.md) — Choisir le niveau SLA adapté
+- [Plans & Fonctionnalités](getting-started/plans-and-pricing.md) — Choisir le niveau SLA adapté
 - [Vue d'ensemble sécurité](security/overview.md)
-- [Contact support](mailto:support@oomus.health)
+- [Contact support](mailto:ceo@oomus.org)

@@ -6,7 +6,7 @@
 
 * [Vue d'ensemble](getting-started/overview.md)
 * [Démarrage rapide](getting-started/quick-start.md)
-* [Plans & Tarification](getting-started/plans-and-pricing.md)
+* [Plans & Fonctionnalités](getting-started/plans-and-pricing.md)
 
 ## Fonctionnalités
 

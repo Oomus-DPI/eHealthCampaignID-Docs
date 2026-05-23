@@ -27,7 +27,7 @@ Crée un nouveau compte programme.
 
 ```json
 {
-  "email": "contact@programme-sante.sn",
+  "email": "ceo@oomus.org",
   "password": "VotreMotDePasse!Secure",
   "full_name": "Programme National de Vaccination",
   "organization": "Ministère de la Santé du Sénégal"
@@ -39,7 +39,7 @@ Crée un nouveau compte programme.
 ```json
 {
   "id": "usr_01HXYZ123ABC",
-  "email": "contact@programme-sante.sn",
+  "email": "ceo@oomus.org",
   "full_name": "Programme National de Vaccination",
   "organization": "Ministère de la Santé du Sénégal",
   "role": "programme_admin",
@@ -67,7 +67,7 @@ Authentifie un utilisateur et retourne les tokens JWT.
 
 ```json
 {
-  "email": "contact@programme-sante.sn",
+  "email": "ceo@oomus.org",
   "password": "VotreMotDePasse!Secure"
 }
 ```
@@ -97,7 +97,7 @@ Authentifie un utilisateur et retourne les tokens JWT.
 curl -X POST https://api.oomus.health/auth/login \
   -H "Content-Type: application/json" \
   -d '{
-    "email": "contact@programme-sante.sn",
+    "email": "ceo@oomus.org",
     "password": "VotreMotDePasse!Secure"
   }'
 ```
@@ -148,7 +148,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 ```json
 {
   "id": "usr_01HXYZ123ABC",
-  "email": "contact@programme-sante.sn",
+  "email": "ceo@oomus.org",
   "name": "Programme National de Vaccination",
   "country": "Sénégal",
   "phone": "+221XXXXXXXXX",
@@ -292,7 +292,7 @@ Deuxième étape d'authentification lorsque la 2FA est activée. À appeler apr�
 
 ```json
 {
-  "email": "contact@programme-sante.sn",
+  "email": "ceo@oomus.org",
   "code": "123456"
 }
 ```

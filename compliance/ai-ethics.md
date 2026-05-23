@@ -139,7 +139,7 @@ Oomus CampaignID s'engage à maintenir et améliorer ses garanties éthiques :
 
 Pour toute question sur l'usage de l'IA dans Oomus CampaignID :
 
-- **E-mail** : ethics@oomus.health
+- **E-mail** : ceo@oomus.org
 - **Documentation** : cette page est mise à jour à chaque évolution significative des composants IA
 
 ---

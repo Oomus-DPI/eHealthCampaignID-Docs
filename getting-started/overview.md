@@ -166,6 +166,6 @@ Le panneau d'administration offre une gestion opérationnelle complète de la pl
 ## Prochaines étapes
 
 - [Démarrage rapide](quick-start.md) — Créez votre première campagne en 5 étapes
-- [Plans & Tarification](plans-and-pricing.md) — Choisissez le plan adapté à votre programme
+- [Plans & Fonctionnalités](plans-and-pricing.md) — Choisissez le plan adapté à votre programme
 - [Identité MPI souveraine](../features/mpi-sovereign-identity.md) — Comprendre le système d'identité numérique
 - [Modules Enterprise v5.2+](../features/enterprise-modules.md) — AI, Geo, Trust Score, Sovereign Wallet

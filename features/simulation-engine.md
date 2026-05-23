@@ -180,5 +180,5 @@ Niveau de plan requis :
 
 ## Prochaines étapes
 
-- [Plans & Tarification](../getting-started/plans-and-pricing.md) — Choisir le bon plan
+- [Plans & Fonctionnalités](../getting-started/plans-and-pricing.md) — Choisir le bon plan
 - [Dashboard & Analytics](dashboard-analytics.md) — Suivre l'utilisation réelle

@@ -127,7 +127,7 @@ En cas de violation de sécurité affectant des données personnelles :
 Si vous découvrez une vulnérabilité de sécurité dans Oomus CampaignID :
 
 1. **Ne pas exploiter** la vulnérabilité
-2. **Contacter** l'équipe sécurité : `security@oomus.health`
+2. **Contacter** l'équipe sécurité : `ceo@oomus.org`
 3. **Décrire** la vulnérabilité avec suffisamment de détails pour reproduction
 4. **Accorder** un délai raisonnable de correction (90 jours)
 
@@ -141,7 +141,7 @@ Nous nous engageons à :
 
 ## Accord de traitement des données (DPA)
 
-Pour les programmes nécessitant un **Data Processing Agreement (DPA)** formalisé — notamment pour les déploiements impliquant des ressortissants de l'UE ou des partenaires exigeant une conformité RGPD — contactez l'équipe Oomus à **legal@oomus.health**.
+Pour les programmes nécessitant un **Data Processing Agreement (DPA)** formalisé — notamment pour les déploiements impliquant des ressortissants de l'UE ou des partenaires exigeant une conformité RGPD — contactez l'équipe Oomus à **ceo@oomus.org**.
 
 ---
 

@@ -75,7 +75,7 @@ Oomus CampaignID permet aux programmes de santé nationaux et aux organisations 
 
 Rendez-vous sur [Démarrage rapide](getting-started/quick-start.md) pour créer votre premier programme et générer vos premières cartes en moins de 10 minutes.
 
-Consultez les [Plans & Tarification](getting-started/plans-and-pricing.md) pour choisir le plan adapté à votre programme.
+Consultez les [Plans & Fonctionnalités](getting-started/plans-and-pricing.md) pour choisir le plan adapté à votre programme.
 
 ---
 

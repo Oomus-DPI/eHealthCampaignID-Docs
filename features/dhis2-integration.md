@@ -202,7 +202,9 @@ Oomus CampaignID propose **10 modèles** de cartes haute résolution pour les do
 
 #### Modèle `sovereign` — DHIS2 Digital Pass
 
-Le modèle `sovereign` reproduit exactement le composant `Dhis2BoardingCard` du prévisualiseur interactif. Il a été entièrement redessiné en v5.9 :
+Le modèle `sovereign` reproduit exactement le composant `Dhis2BoardingCard` du prévisualiseur interactif. Il a été entièrement redessiné en v5.9.
+
+**Format de sortie** : Boarding Pass uniquement — le format Wallet Pass a été retiré du sélecteur FORMAT DE SORTIE (v5.12). Le Boarding Pass reste le format standard pour l'impression PVC et PDF.
 
 - **Format** : 1011×375 px @ 300 DPI (ratio 480:178, boarding-pass horizontal)
 - **En-tête** : jusqu'à 3 logos + "DHIS2 DIGITAL PASS" (tout en majuscules) + "Identity Pass · eHealth Platform" — badge "Sovereign Id" supprimé

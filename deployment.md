@@ -1,6 +1,6 @@
 # Guide de déploiement
 
-> **Version** : 5.9 · **Date** : 2026-05-20
+> **Version** : 5.12 · **Date** : 2026-05-23
 
 Oomus CampaignID peut être déployé sur votre propre infrastructure (on-premises, cloud public ou hébergement souverain) ou utilisé en mode SaaS hébergé par Oomus.
 
@@ -259,6 +259,13 @@ curl https://mondomaine.sn/health
 
 ---
 
+## Nouveau dans la v5.12
+
+- **CI/CD — Release débloquée** : le job `release` utilise désormais `if: always() && ... && needs.docker-build.result != 'failure'` — il ne peut plus être skippé automatiquement si `docker-build` est lent ou en attente. Un push de tag `v*.*.*` crée toujours la GitHub Release dès que ce critère est satisfait
+- **CI/CD — Déploiement préflight** : le job `deploy` vérifie en amont si `DEPLOY_HOST` et `DEPLOY_SSH_KEY` sont configurés. Si absent, le job s'affiche comme ignoré avec un récapitulatif des secrets à configurer (plus de crash SSH)
+- **Données réelles garanties** : l'endpoint `/analytics/studio-stats` expose désormais `dhis2_cards` depuis `EngineUsageRecord` (source de vérité DB persistante). Le fallback `programme.cards_generated` ne peut plus afficher de données seedées. Le compte démo est initialisé avec `cards_generated=0`
+- **DHIS2 FORMAT DE SORTIE** : le sélecteur Boarding Pass / Wallet Pass est remplacé par Boarding Pass uniquement — format standard impression PVC / PDF
+
 ## Nouveau dans la v5.9
 
 - **Durcissement sécurité complet** : isolation réseau Docker (PostgreSQL/Redis sans port externe, MinIO/Flower sur 127.0.0.1), nouvelles variables obligatoires (`REDIS_PASSWORD`, `MINIO_ROOT_USER/PASSWORD`, `FLOWER_USER/PASSWORD`), CORS strict, CSP header, HSTS, docs API masquées en production
@@ -288,4 +295,4 @@ curl https://mondomaine.sn/health
 
 ## Support déploiement
 
-Pour un accompagnement sur le déploiement souverain, contactez : **contact@oomus.health**
+Pour un accompagnement sur le déploiement souverain, contactez : **ceo@oomus.org**

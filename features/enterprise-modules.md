@@ -16,7 +16,7 @@ Un indicateur unique synthétise l'état global de votre programme :
 |---|---|---|
 | Taux de succès des jobs | 40 % | `GenerationJob.status = 'completed'` — 30 derniers jours |
 | Santé quota | 30 % | `EngineUsageRecord` / quota mensuel du plan |
-| Santé solde | 30 % | `Programme.balance_fcfa` / abonnement mensuel |
+| Santé solde | 30 % | `Programme.balance_fcfa` / quota mensuel du plan |
 
 **Niveaux :**
 
@@ -68,7 +68,7 @@ Des recommandations priorisées sont générées automatiquement à partir de vo
 | Priorité | Déclencheur |
 |---|---|
 | `critical` | Quota ≥ 90%, projection solde négative, taux succès < 70% |
-| `high` | Quota ≥ 75%, solde < 50 000 FCFA, taux succès < 90% |
+| `high` | Quota ≥ 75%, solde insuffisant, taux succès < 90% |
 | `medium` | > 5 échecs sync DHIS2, > 10 échecs distribution |
 | `low` | Système nominal |
 
@@ -270,6 +270,6 @@ Pour activer un module : contactez votre gestionnaire de compte Oomus ou accéde
 ## Prochaines étapes
 
 - [Référence API Enterprise](../api-reference/enterprise-modules.md) — Documentation technique des endpoints
-- [Plans & Tarification](../getting-started/plans-and-pricing.md) — Comparer les plans
+- [Plans & Fonctionnalités](../getting-started/plans-and-pricing.md) — Comparer les plans
 - [Intégration DHIS2](../features/dhis2-integration.md) — Synchroniser vos données terrain
 - [Identité souveraine MPI](../features/mpi-sovereign-identity.md) — Registre national de santé

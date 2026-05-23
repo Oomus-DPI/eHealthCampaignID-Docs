@@ -1,68 +1,50 @@
-# Plans & Tarification
+# Plans & Fonctionnalités
 
 Oomus CampaignID propose quatre plans adaptés à la taille et aux besoins de chaque programme de santé — du projet pilote au déploiement national.
 
-> Les tarifs indiqués sont en **Francs CFA (FCFA)**. Les prix sont configurables par les administrateurs de la plateforme selon les accords institutionnels.
+> Les tarifs sont disponibles sur devis selon les accords institutionnels de votre programme. Contactez **ceo@oomus.org** pour obtenir une proposition personnalisée.
 
 ---
 
-## Tableau comparatif des plans
+## Les quatre plans
 
-| Plan | Abonnement / mois | Bénéficiaires | SMS inclus | WhatsApp | Stockage |
-|---|---|---|---|---|---|
-| **Starter** | 25 000 FCFA | 10 000 | 50 000 | 10 000 | 10 Go |
-| **Regional Ops** | 75 000 FCFA | 100 000 | 500 000 | 100 000 | 50 Go |
-| **National Campaign** | 250 000 FCFA | 1 000 000 | 5 000 000 | 1 000 000 | 500 Go |
-| **Sovereign Enterprise** | 750 000 FCFA | 10 000 000 | 50 000 000 | 10 000 000 | 5 To |
-
----
-
-## Description des plans
-
-### Starter — 25 000 FCFA/mois
+### Starter
 
 Idéal pour les **projets pilotes**, les programmes locaux ou les ONG à taille humaine. Conçu pour explorer toutes les fonctionnalités de la plateforme sur un périmètre géographique réduit (une commune, un district).
 
-- Jusqu'à 10 000 bénéficiaires
-- 50 000 SMS et 10 000 messages WhatsApp inclus
-- 10 Go de stockage sécurisé
 - Accès à tous les modèles de cartes
+- Distribution WhatsApp et SMS inclus
+- MPI souverain
+- Intégration DHIS2 basique
 - Support communautaire
 
 ---
 
-### Regional Ops — 75 000 FCFA/mois
+### Regional Ops
 
 Conçu pour les **programmes régionaux** opérant à l'échelle d'une région ou d'un groupe de districts sanitaires. Adapté aux campagnes saisonnières (vaccination de routine, distribution MILD).
 
-- Jusqu'à 100 000 bénéficiaires
-- 500 000 SMS et 100 000 messages WhatsApp inclus
-- 50 Go de stockage sécurisé
-- RBAC avec gestion d'équipe (rôles multiples)
+- RBAC multi-niveaux avec gestion d'équipe
+- Intégration DHIS2 complète (sync automatique)
 - Support e-mail prioritaire
 
 ---
 
-### National Campaign — 250 000 FCFA/mois
+### National Campaign
 
 Conçu pour les **déploiements nationaux** à grande échelle — directions nationales de santé, ministères, programmes intégrés multi-districts.
 
-- Jusqu'à 1 000 000 de bénéficiaires
-- 5 000 000 SMS et 1 000 000 messages WhatsApp inclus
-- 500 Go de stockage sécurisé
 - Analytics avancées incluses
-- Intégration DHIS2 complète (sync automatique)
+- Intégration DHIS2 complète avec sync automatique
 - SLA renforcé
+- Moteur de simulation avancé
 
 ---
 
-### Sovereign Enterprise — 750 000 FCFA/mois
+### Sovereign Enterprise
 
 Le plan **Enterprise souverain**, conçu pour les déploiements nationaux multi-programmes à très grande échelle. Option d'hébergement souverain disponible.
 
-- Jusqu'à 10 000 000 de bénéficiaires
-- 50 000 000 SMS et 10 000 000 messages WhatsApp inclus
-- 5 To de stockage sécurisé
 - Hébergement souverain optionnel (infrastructure dédiée en pays)
 - SLA Premium/Critique contractuel
 - Support dédié 24/7
@@ -73,7 +55,7 @@ Le plan **Enterprise souverain**, conçu pour les déploiements nationaux multi-
 
 ## Dépassement de quota
 
-Lorsque votre programme dépasse son quota mensuel de bénéficiaires, les cartes supplémentaires sont facturées **à l'unité**, au tarif configuré par votre administrateur de plateforme. Le coût unitaire est visible depuis votre dashboard (section **Facturation > Solde**).
+Lorsque votre programme dépasse son quota mensuel de bénéficiaires, les cartes supplémentaires sont facturées à l'unité, au tarif configuré par votre administrateur de plateforme. Le coût unitaire est visible depuis votre dashboard (section **Facturation > Solde**).
 
 Vous pouvez à tout moment :
 - Consulter votre consommation en temps réel dans le Dashboard
@@ -150,11 +132,11 @@ Non. Les quotas SMS/WhatsApp sont mensuels et non reportables au mois suivant.
 Oui. Le changement de plan est effectif immédiatement. Un prorata peut s'appliquer selon les termes de votre contrat.
 
 **Les prix peuvent-ils varier selon le pays ?**  
-Oui. Les tarifs peuvent être adaptés par les administrateurs de la plateforme pour refléter les accords institutionnels locaux (USD, EUR, MRU, GNF, etc.).
+Oui. Les tarifs sont adaptés par les administrateurs de la plateforme pour refléter les accords institutionnels locaux.
 
 **Existe-t-il une version d'essai gratuite ?**  
 Contactez l'équipe Oomus pour un accès démo ou une période d'évaluation encadrée.
 
 ---
 
-> Pour obtenir un devis personnalisé ou discuter d'un déploiement souverain, contactez-nous : **contact@oomus.health**
+> Pour obtenir un devis personnalisé ou discuter d'un déploiement souverain, contactez-nous : **ceo@oomus.org**

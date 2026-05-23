@@ -631,6 +631,102 @@ Statistiques du portefeuille du programme.
 
 ---
 
+## Module 5 — Analytics Avancées
+
+**Base URL** : `/api/v1/analytics`
+
+### `GET /analytics/summary`
+
+Métriques clés sur les N derniers jours (Studio + DHIS2 combinés). Disponible sans module premium.
+
+**Query params** : `days` (int, défaut 30)
+
+**Réponse 200 :**
+```json
+{
+  "period_days": 30,
+  "total_campaigns": 12,
+  "all_campaigns": 48,
+  "total_jobs": 34,
+  "total_cards": 2850,
+  "completed_jobs": 31,
+  "failed_jobs": 1,
+  "success_rate": 91.2,
+  "total_spend_fcfa": 142500,
+  "balance_fcfa": 857500,
+  "cards_total": 12400
+}
+```
+
+> `cards_total` = total all-time (Studio + DHIS2) depuis `EngineUsageRecord`. Affiche `0` si aucune carte réelle générée — pas de valeur seedée.
+
+---
+
+### `GET /analytics/studio-stats`
+
+Statistiques all-time Studio + DHIS2 depuis la base de données (source de vérité persistante).
+
+**Réponse 200 :**
+```json
+{
+  "total_cards": 8200,
+  "dhis2_cards": 4150,
+  "jobs_by_status": { "completed": 42, "failed": 2, "running": 1 },
+  "cards_by_status": { "completed": 8200 },
+  "dpi_distribution": [
+    { "render_scale": 1.0, "jobs": 38, "cards": 7400 },
+    { "render_scale": 1.4, "jobs": 4,  "cards": 800 }
+  ],
+  "sms_sent": 1240,
+  "whatsapp_sent": 380,
+  "qr_verified": 622,
+  "storage_mb": 1840,
+  "pdf_exports": 18,
+  "cost_fcfa": 41000,
+  "total_cost_fcfa": 54200
+}
+```
+
+> `total_cards` : cartes Studio (`GenerationJob` status=completed).
+> `dhis2_cards` : cartes DHIS2 depuis `EngineUsageRecord` engine_mode=`studio_print` — **v5.12**, source DB persistante sans limite TTL.
+
+---
+
+### `GET /analytics/campaigns-timeline`
+
+Évolution quotidienne Studio + DHIS2 sur N jours.
+
+**Query params** : `days` (int, défaut 30)
+
+**Réponse 200 :**
+```json
+[
+  {
+    "date": "2026-05-20",
+    "jobs": 3,
+    "cards": 450,
+    "dhis2_cards": 200
+  }
+]
+```
+
+> `dhis2_cards` : cartes DHIS2 du jour depuis `EngineUsageRecord.last_updated`. `cards` = total (Studio + DHIS2).
+
+---
+
+### `GET /analytics/spend-timeline`
+
+Évolution des dépenses sur N jours.
+
+**Query params** : `days` (int, défaut 30)
+
+**Réponse 200 :**
+```json
+[{ "date": "2026-05-20", "amount_fcfa": 4750 }]
+```
+
+---
+
 ## Codes d'erreur communs
 
 | Code | Signification |

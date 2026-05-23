@@ -24,7 +24,7 @@ Ce guide vous permet de créer votre première campagne et de générer vos prem
 curl -X POST https://api.oomus.health/auth/register \
   -H "Content-Type: application/json" \
   -d '{
-    "email": "contact@programme-sante.sn",
+    "email": "ceo@oomus.org",
     "password": "VotreMotDePasse!",
     "full_name": "Programme National de Vaccination",
     "organization": "Ministère de la Santé du Sénégal"
@@ -35,7 +35,7 @@ curl -X POST https://api.oomus.health/auth/register \
 ```json
 {
   "id": "usr_01HXYZ123ABC",
-  "email": "contact@programme-sante.sn",
+  "email": "ceo@oomus.org",
   "full_name": "Programme National de Vaccination",
   "organization": "Ministère de la Santé du Sénégal",
   "role": "programme_admin",
@@ -53,7 +53,7 @@ curl -X POST https://api.oomus.health/auth/register \
 curl -X POST https://api.oomus.health/auth/login \
   -H "Content-Type: application/json" \
   -d '{
-    "email": "contact@programme-sante.sn",
+    "email": "ceo@oomus.org",
     "password": "VotreMotDePasse!"
   }'
 ```
@@ -255,4 +255,4 @@ Une fois la génération terminée, distribuez les cartes depuis l'interface ou 
 - [Card Studio](../features/card-studio.md) — Maîtriser l'éditeur visuel
 - [Identité MPI souveraine](../features/mpi-sovereign-identity.md) — Activer la déduplication
 - [Intégration DHIS2](../features/dhis2-integration.md) — Synchroniser depuis DHIS2 Tracker
-- [Plans & Tarification](plans-and-pricing.md) — Adapter votre quota à votre programme
+- [Plans & Fonctionnalités](plans-and-pricing.md) — Adapter votre quota à votre programme

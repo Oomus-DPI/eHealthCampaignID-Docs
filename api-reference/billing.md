@@ -19,8 +19,6 @@ Retourne le solde et les quotas du compte authentifié.
   "plan": "regional_ops",
   "plan_display_name": "Regional Ops",
   "balance_fcfa": 45000,
-  "monthly_subscription_fcfa": 75000,
-  "price_per_card_fcfa": 8,
   "quota": {
     "beneficiaries_total": 100000,
     "beneficiaries_used": 23450,
@@ -36,19 +34,16 @@ Retourne le solde et les quotas du compte authentifié.
     "storage_gb_remaining": 46.8
   },
   "quota_reset_date": "2026-06-01T00:00:00Z",
-  "overage_price_per_beneficiary_fcfa": 15,
   "currency": "XOF"
 }
 ```
 
 | Champ | Type | Description |
 |---|---|---|
-| `balance_fcfa` | integer | Crédit disponible en FCFA |
-| `monthly_subscription_fcfa` | integer | Montant de l'abonnement mensuel |
-| `price_per_card_fcfa` | integer | Prix unitaire par carte générée |
+| `balance_fcfa` | integer | Crédit disponible |
 | `quota.beneficiaries_total` | integer | Quota mensuel total de bénéficiaires |
 | `quota.beneficiaries_used` | integer | Bénéficiaires consommés ce mois |
-| `overage_price_per_beneficiary_fcfa` | integer | Prix par bénéficiaire en dépassement |
+| `quota.beneficiaries_remaining` | integer | Bénéficiaires restants |
 
 ---
 
@@ -104,7 +99,7 @@ Retourne l'historique des transactions du compte.
 
 ## GET /billing/quota-plans
 
-Retourne la liste des plans tarifaires disponibles.
+Retourne la liste des plans disponibles et leurs fonctionnalités.
 
 **Réponse 200 OK :**
 
@@ -114,52 +109,34 @@ Retourne la liste des plans tarifaires disponibles.
     {
       "alias": "starter",
       "display_name": "Starter",
-      "monthly_price_fcfa": 25000,
-      "beneficiaries_quota": 10000,
-      "sms_quota": 50000,
-      "whatsapp_quota": 10000,
-      "storage_gb": 10,
       "features": ["card_generation", "distribution", "mpi", "dhis2_basic"]
     },
     {
       "alias": "regional_ops",
       "display_name": "Regional Ops",
-      "monthly_price_fcfa": 75000,
-      "beneficiaries_quota": 100000,
-      "sms_quota": 500000,
-      "whatsapp_quota": 100000,
-      "storage_gb": 50,
       "features": ["card_generation", "distribution", "mpi", "dhis2_full", "rbac_3_levels"]
     },
     {
       "alias": "national_campaign",
       "display_name": "National Campaign",
-      "monthly_price_fcfa": 250000,
-      "beneficiaries_quota": 1000000,
-      "sms_quota": 5000000,
-      "whatsapp_quota": 1000000,
-      "storage_gb": 500,
       "features": ["card_generation", "distribution", "mpi", "dhis2_full", "rbac_4_levels", "advanced_analytics", "enhanced_sla"]
     },
     {
       "alias": "sovereign_enterprise",
       "display_name": "Sovereign Enterprise",
-      "monthly_price_fcfa": 750000,
-      "beneficiaries_quota": 10000000,
-      "sms_quota": 50000000,
-      "whatsapp_quota": 10000000,
-      "storage_gb": 5120,
       "features": ["all_features", "sovereign_hosting", "dedicated_support", "critical_sla"]
     }
   ]
 }
 ```
 
+> Les quotas et conditions tarifaires associés à chaque plan sont communiqués sur devis. Contactez **ceo@oomus.org**.
+
 ---
 
 ## POST /billing/change-plan
 
-Change le plan tarifaire du compte.
+Change le plan du compte.
 
 **Corps de la requête :**
 
@@ -234,14 +211,12 @@ Retourne la liste des modules premium disponibles et leur statut d'activation.
       "id": "sms_gateway",
       "name": "SMS Gateway",
       "description": "Accès étendu aux passerelles SMS supplémentaires",
-      "price_fcfa_monthly": 15000,
       "status": "inactive"
     },
     {
       "id": "advanced_analytics",
       "name": "Advanced Analytics",
       "description": "Tableaux de bord analytiques avancés, exports CSV/Excel",
-      "price_fcfa_monthly": 20000,
       "status": "active",
       "activated_at": "2026-04-01T00:00:00Z"
     },
@@ -249,19 +224,19 @@ Retourne la liste des modules premium disponibles et leur statut d'activation.
       "id": "ai_fraud_detection",
       "name": "AI Fraud Detection",
       "description": "Détection d'anomalies en temps réel par IA (IsolationForest)",
-      "price_fcfa_monthly": 30000,
       "status": "inactive"
     },
     {
       "id": "sovereign_hosting",
       "name": "Sovereign Hosting",
       "description": "Hébergement dédié en infrastructure nationale ou régionale",
-      "price_fcfa_monthly": null,
       "status": "quote_required"
     }
   ]
 }
 ```
+
+> Les tarifs des modules premium sont disponibles sur devis selon votre plan et votre accord institutionnel.
 
 ---
 
@@ -300,6 +275,6 @@ Active un module premium.
 
 ## Prochaines étapes
 
-- [Plans & Tarification](../getting-started/plans-and-pricing.md) — Comparatif des plans
+- [Plans & Fonctionnalités](../getting-started/plans-and-pricing.md) — Comparatif des plans
 - [Authentification](authentication.md) — Gestion des tokens
 - [Campagnes & Jobs](campaigns-and-jobs.md) — Utiliser votre quota
