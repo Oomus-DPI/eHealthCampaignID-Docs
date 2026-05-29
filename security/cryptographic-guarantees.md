@@ -124,6 +124,27 @@ Un acteur malveillant qui scannerait des QR codes de masse dans une clinique :
 
 ---
 
+## Signatures de factures — HMAC-SHA256
+
+Chaque facture émise par la plateforme porte une **signature HMAC-SHA256** (keyed hash) stockée dans `Invoice.signature_hash`.
+
+### Algorithme et format
+
+| Élément | Valeur |
+| --- | --- |
+| **Algorithme** | HMAC-SHA256 (Python `hmac` standard library) |
+| **Clé** | `SECRET_KEY` de l'environnement (≥ 64 chars en production) |
+| **Payload signé** | `invoice_id:invoice_number:total_fcfa:billing_period` |
+| **Résistance** | Impossible de forger une signature sans connaître `SECRET_KEY` |
+
+### Vérification
+
+Toute facture dont la signature ne correspond pas au recalcul HMAC est considérée comme **altérée**. Le endpoint `GET /billing/v2/invoices/{id}/verify` permet de vérifier une facture à tout moment.
+
+> **Note importante** : les factures générées avant la v5.14.1 utilisaient un hachage SHA-256 sans clé (non-HMAC). Ces factures peuvent être identifiées par leur format de `signature_hash` (longueur identique mais non vérifiable via HMAC). Il est recommandé de les régénérer ou de les annoter comme `legacy_signature` dans vos audits.
+
+---
+
 ## Recommandations pour la production
 
 Bien qu'Oomus CampaignID intègre des garanties cryptographiques robustes, les déploiements en production bénéficient des mesures complémentaires suivantes :
