@@ -1,6 +1,6 @@
 # Vue d'ensemble
 
-> **Version** : 5.11 · **Date** : 2026-05-23
+> **Version** : 5.14.1 · **Date** : 2026-05-30
 
 ## Vision
 
@@ -88,19 +88,21 @@ Sélectionner un pays dans les paramètres du programme remplit automatiquement 
 - Workflow d'approbation admin multi-niveaux
 - Génération de contrats (PDF, Excel, JSON/YAML)
 
-### Panneau Admin v5.6 — Gouvernance complète
-Le panneau d'administration offre une gestion opérationnelle complète de la plateforme :
+### Panneau Admin v5.14 — Gouvernance complète
+
+Le panneau d'administration offre une gestion opérationnelle complète de la plateforme en **9 sections** dédiées :
 
 | Section admin | Capacités |
 |---|---|
-| **Intégration DHIS2** | Gestion configs, toggle actif/inactif, sync manuelle, consultation enrollments |
-| **Portails Vérification** | Création, statut, suppression des portails de vérification dédiés |
-| **Analytics Plateforme** | KPIs globaux, taux de succès, top programmes par volume de cartes |
-| **Détection Fraude IA** | Alertes IsolationForest, filtres par risque, répartition par type, dismiss |
-| **Toutes les Campagnes** | Vue globale multi-programmes, filtres status/type/recherche, suppression |
-| **Jobs de Génération** | Stats workers Celery, filtre statut, annulation de jobs actifs |
-| **Commandes PVC** | Suivi fabrication et livraison, transitions de statut, saisie N° de suivi |
-| **Registre MPI Souverain** | Stats globales, liste paginée, détail identité, vérification manuelle |
+| **Vue d'ensemble** | Statistiques globales plateforme, gestion programmes, validation rechargements, config moteur facturation |
+| **Intégration DHIS2** | Gestion configs, circuit breaker, métriques sync, mapping champs, diagnostics erreurs |
+| **Portails Vérification** | Révocation portails, métriques scans, déploiement CDN ou auto-hébergement |
+| **Analytics Plateforme** | KPIs business agrégés, revenus, tendances, usage modules enterprise, exports CSV/Excel |
+| **Détection Fraude IA** | Alertes IsolationForest, filtres min_risk, répartition par type (brute_force, HMAC invalide…) |
+| **Toutes les Campagnes** | Vue globale multi-programmes, filtres status/type/recherche |
+| **Jobs de Génération** | Supervision async Celery, statuts en temps réel, remboursement quota auto, WebSocket |
+| **Commandes PVC** | Cycle pending→delivered, config prix admin, N° de suivi, factures automatiques |
+| **Registre MPI Souverain** | Fédération cross-programmes, fusion doublons, vérification KYC, audit trail complet |
 
 ### Sécurité et conformité
 - Authentification JWT HS256 (algorithme fixé, token versioning) + bcrypt, RBAC institutionnel
@@ -147,10 +149,10 @@ Le panneau d'administration offre une gestion opérationnelle complète de la pl
 
 ```
 ┌──────────────────────────────────────────────────────────────────┐
-│                       Oomus CampaignID v5.11                     │
+│                      Oomus CampaignID v5.14.1                    │
 ├──────────────┬──────────────────┬───────────────────┬────────────┤
-│  Card Studio │  Campaign Engine │  MPI Sovereign    │  Admin v5.4│
-│  (11 modèles)│  (Celery async)  │  Identity         │  (8 pages) │
+│  Card Studio │  Campaign Engine │  MPI Sovereign    │  Admin v5.14│
+│  (11 modèles)│  (Celery async)  │  Identity         │  (9 pages) │
 ├──────────────┴──────────────────┴───────────────────┴────────────┤
 │              DHIS2 Tracker Integration (safe read-only guard)     │
 ├──────────────┬──────────────────┬───────────────────┬────────────┤

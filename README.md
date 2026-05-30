@@ -2,7 +2,7 @@
 
 **Infrastructure souveraine de santé publique numérique pour les programmes nationaux en Afrique et dans les pays à ressources limitées.**
 
-> **Version** : 5.14 · **Date** : 2026-05-29 · **Statut** : Production
+> **Version** : 5.14.1 · **Date** : 2026-05-30 · **Statut** : Production
 
 ---
 
@@ -39,9 +39,10 @@ Oomus CampaignID permet aux programmes de santé nationaux et aux organisations 
 - **Sovereign Wallet** — Passes digitaux signés HMAC-SHA256, bundle offline XOR-SHA256, sync appareils, révocation auditée
 - **Simulation financière** — Estimation proforma 6 étapes, workflow d'approbation admin, génération PDF/Excel institutionnel
 - **Cartes PVC physiques** — Standard PVC (350 FCFA/carte) et Offset Industriel (650 FCFA/carte), timeline de suivi avec notifications
-- **Billing Infrastructure v6** — Registre comptable centralisé : chaque débit génère Transaction + Invoice signée + AuditLog immuable
+- **Billing Infrastructure v6** — Registre comptable centralisé : chaque débit génère Transaction + Invoice signée **HMAC-SHA256** (v5.14.1) + AuditLog immuable. Numéro unique `INV-{TYPE}-{YYYYMM}-{6chars}`.
 - **Dashboard opérationnel** — KPIs temps réel, analytics avancées, santé de l'infrastructure, alertes
 - **Centre Billing admin** — Vue consolidée abonnements, devis, factures, tarification, simulations
+- **Panneau Admin v5.14** — 9 pages de gouvernance : programmes, DHIS2, portails vérification, analytics, fraude IA, campagnes, jobs, PVC, MPI souverain
 - **UI enterprise v5.14** — Design Stripe-inspired, IBM Plex Sans + Mono, dark hero, responsive, dark mode natif
 
 ---

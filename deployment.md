@@ -259,6 +259,22 @@ curl https://mondomaine.sn/health
 
 ---
 
+## Nouveau dans la v5.14.1
+
+- **Signatures HMAC factures** : `_sign_invoice` utilise désormais `hmac.new(SECRET_KEY, ...)` — les signatures sont vérifiables et résistantes à la falsification. Les factures émises avant v5.14.1 portent une signature SHA-256 legacy (non-HMAC).
+- **Validation admin prix PVC** : `PUT /pvc/admin/prices` valide désormais `lead_days >= 0` et `min_qty > 0` — un délai négatif ne peut plus générer une date de livraison dans le passé.
+- **Audit log `verify_platform.create`** restauré dans `billing.py` — événement tracé avec `resource_type='verify_platform'`.
+- **Correction `sync_plan_modules_for_all`** dans `init_db.py` : commit inconditionnel sur les réactivations de modules (corrige les modules qui restaient `is_active=False` après restart).
+- **Nettoyage dead code** : helpers PVC `_get_unit_price` et `_get_lead_days` supprimés, `_PLAN_LEGACY_MAP` promu en constante module-level, regex compilé dans `get_billing_ledger`.
+
+## Nouveau dans la v5.14
+
+- **Billing Infrastructure v6 — Ledger centralisé** : tout débit (plan, module, PVC, génération) génère atomiquement `Transaction + Invoice + AuditLog`. Numéro facture `INV-{TYPE}-{YYYYMM}-{6chars}`. Onglet "Registre comptable" dans BillingPage.
+- **PVC Cartes Physiques v2** : deux types d'impression (`standard_pvc` / `offset_industriel`), prix configurables admin, timeline horizontale 5 étapes avec `status_history` JSON, `estimated_delivery_at` automatique.
+- **BillingPage v6** : 7 onglets, QuoteModal deux parcours (débit auto / devis institutionnel), usage réel `GET /billing/my-usage`, AdminBillingCenter 6 onglets.
+- **Simulation Engine v2** : 5 modes (`rapid / regional / national / multicountry / sovereign`), approche capability-first, `recommend_plan()` avec confidence score, `PlatformSetting` pour config moteur.
+- **Panneau Admin 9 pages** : overview, dhis2, verification-portals, analytics, fraud, campaigns, jobs, pvc, mpi — entièrement documenté dans `docs-public/admin/`.
+
 ## Nouveau dans la v5.12
 
 - **CI/CD — Release débloquée** : le job `release` utilise désormais `if: always() && ... && needs.docker-build.result != 'failure'` — il ne peut plus être skippé automatiquement si `docker-build` est lent ou en attente. Un push de tag `v*.*.*` crée toujours la GitHub Release dès que ce critère est satisfait
