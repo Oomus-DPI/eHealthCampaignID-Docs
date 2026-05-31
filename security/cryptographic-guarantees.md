@@ -12,7 +12,6 @@ Chaque carte générée par Oomus CampaignID reçoit un **identifiant unique** p
 
 - **Format** : Base36 (chiffres 0–9 + lettres A–Z)
 - **Longueur** : 8 caractères
-- **Espace de combinaisons** : environ **2,8 milliards** de valeurs possibles
 - **Collision** : pratiquement impossible dans l'espace d'une campagne
 
 ### Garanties
@@ -34,8 +33,9 @@ Les données de vérification sensibles sont protégées par un **chiffrement au
 ### Pourquoi AES-256-GCM ?
 
 L'AES-256-GCM offre deux propriétés simultanées :
+
 - **Confidentialité** : les données chiffrées sont illisibles sans la clé
-- **Authenticité** : tout chiffre altéré est détecté immédiatement (tag d'authentification GCM)
+- **Authenticité** : tout chiffrement altéré est détecté immédiatement (tag d'authentification GCM)
 
 Cela signifie qu'une tentative de falsification des données chiffrées est détectable, pas seulement illisible.
 
@@ -52,7 +52,7 @@ Bloc 0 (Genesis)
    │ SHA-256(données_0 + hash_genesis)
    ▼
 Bloc 1 : hash_1 = SHA-256(données_1 + hash_0)
-   │ SHA-256(données_1 + hash_0)
+   │
    ▼
 Bloc 2 : hash_2 = SHA-256(données_2 + hash_1)
    │
@@ -68,7 +68,7 @@ Bloc 2 : hash_2 = SHA-256(données_2 + hash_1)
 | **Détection de falsification** | Toute manipulation de la chaîne est détectable |
 | **Non-répudiation** | Chaque action est irréfutablement liée à son acteur et son horodatage |
 
-La chaîne d'audit est également utilisée pour lier le `registry.json` du portail de vérification à l'audit de génération.
+La chaîne d'audit est également utilisée pour lier le registre du portail de vérification à l'audit de génération.
 
 ---
 
@@ -83,7 +83,7 @@ La vérification des cartes en mode hors ligne utilise l'**API WebCrypto** nativ
 | **Natif navigateur** | Aucun plugin, aucune application à installer |
 | **Exécution locale** | Aucune donnée ne quitte l'appareil lors de la vérification |
 | **Standard W3C** | Disponible sur Chrome, Firefox, Safari, Edge (tous appareils) |
-| **Performances** | Vérification instantanée (< 50 ms) |
+| **Performances** | Vérification instantanée |
 
 ### Processus de vérification
 
@@ -91,21 +91,21 @@ La vérification des cartes en mode hors ligne utilise l'**API WebCrypto** nativ
 Code carte ou jeton QR scanné
           │
           ▼
-Dérivation SHA-256 dans le navigateur (WebCrypto)
+Dérivation cryptographique dans le navigateur (WebCrypto)
           │
           ▼
-Lookup dans registry.json local
+Lookup dans le registre local
           │
-          ├─ Hash trouvé, statut = "valid" → Carte authentique
-          ├─ Hash trouvé, statut = "revoked" → Carte révoquée
-          └─ Hash non trouvé → Carte inconnue / potentiellement falsifiée
+          ├─ Entrée trouvée, statut = "valid"   → Carte authentique
+          ├─ Entrée trouvée, statut = "revoked" → Carte révoquée
+          └─ Non trouvée → Carte inconnue / potentiellement falsifiée
 ```
 
 ---
 
 ## Jeton QR opaque — Non-réversibilité
 
-Le QR code imprimé sur chaque carte contient un **jeton opaque non-réversible**, dérivé par hachage SHA-256.
+Le QR code imprimé sur chaque carte contient un **jeton opaque non-réversible**.
 
 ### Propriétés du jeton
 
@@ -119,42 +119,36 @@ Le QR code imprimé sur chaque carte contient un **jeton opaque non-réversible*
 ### Pourquoi c'est important
 
 Un acteur malveillant qui scannerait des QR codes de masse dans une clinique :
-- **Avec un QR classique** : pourrait récolter des identités de santé, lier des noms à des programmes (HIV, etc.)
-- **Avec le jeton opaque Oomus** : ne récolte que des chaînes de caractères aléatoires sans valeur exploitable
+
+- **Avec un QR classique** : pourrait récolter des identités de santé, lier des noms à des programmes sensibles
+- **Avec le jeton opaque Oomus** : ne récolte que des chaînes de caractères sans valeur exploitable
 
 ---
 
-## Signatures de factures — HMAC-SHA256
+## Signatures de factures
 
-Chaque facture émise par la plateforme porte une **signature HMAC-SHA256** (keyed hash) stockée dans `Invoice.signature_hash`.
+Chaque facture émise par la plateforme porte une **signature cryptographique** (keyed hash) garantissant son intégrité.
 
-### Algorithme et format
+### Propriétés
 
-| Élément | Valeur |
-| --- | --- |
-| **Algorithme** | HMAC-SHA256 (Python `hmac` standard library) |
-| **Clé** | `SECRET_KEY` de l'environnement (≥ 64 chars en production) |
-| **Payload signé** | `invoice_id:invoice_number:total_fcfa:billing_period` |
-| **Résistance** | Impossible de forger une signature sans connaître `SECRET_KEY` |
+| Propriété | Garantie |
+|---|---|
+| **Intégrité** | Toute facture altérée est immédiatement détectable |
+| **Non-forgeable** | Impossible de créer ou modifier une facture sans la clé serveur |
+| **Vérifiable** | Chaque facture peut être vérifiée à tout moment via l'API |
 
-### Vérification
-
-Toute facture dont la signature ne correspond pas au recalcul HMAC est considérée comme **altérée**. Le endpoint `GET /billing/v2/invoices/{id}/verify` permet de vérifier une facture à tout moment.
-
-> **Note importante** : les factures générées avant la v5.14.1 utilisaient un hachage SHA-256 sans clé (non-HMAC). Ces factures peuvent être identifiées par leur format de `signature_hash` (longueur identique mais non vérifiable via HMAC). Il est recommandé de les régénérer ou de les annoter comme `legacy_signature` dans vos audits.
+L'endpoint `GET /billing/invoices/{id}/verify` permet de vérifier l'authenticité d'une facture.
 
 ---
 
 ## Recommandations pour la production
 
-Bien qu'Oomus CampaignID intègre des garanties cryptographiques robustes, les déploiements en production bénéficient des mesures complémentaires suivantes :
-
 | Mesure | Description |
 |---|---|
-| **SSL/TLS** | Certificat TLS valide sur toutes les URLs publiques (`https://`) |
-| **WAF** | Web Application Firewall pour protéger l'API contre les attaques courantes |
-| **Rotation des clés** | Politique de rotation régulière des clés de signature JWT |
-| **Pare-feu réseau** | Restriction des accès à l'infrastructure aux plages IP autorisées |
+| **SSL/TLS** | Certificat TLS valide sur toutes les URLs publiques |
+| **WAF** | Web Application Firewall pour protéger l'API |
+| **Rotation des clés** | Politique de rotation régulière des clés de signature |
+| **Pare-feu réseau** | Restriction des accès aux plages IP autorisées |
 | **Monitoring** | Surveillance des tentatives d'accès anormales |
 
 ---

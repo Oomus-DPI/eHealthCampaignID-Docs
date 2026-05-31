@@ -19,25 +19,9 @@
 * [Portail de vérification](features/verification.md)
 * [Dashboard & Analytics IA](features/dashboard-analytics.md)
 
-## Modules Enterprise v5.2+
+## Modules Enterprise
 
 * [Vue d'ensemble des modules enterprise](features/enterprise-modules.md)
-* [AI Campaign Optimizer](features/enterprise-modules.md#module-1--ai-campaign-optimizer)
-* [Geospatial Command Center](features/enterprise-modules.md#module-2--geospatial-command-center)
-* [Health Trust Score](features/enterprise-modules.md#module-3--health-trust-score)
-* [Sovereign Wallet](features/enterprise-modules.md#module-4--sovereign-wallet)
-
-## Administration & Gouvernance v5.14
-
-* [Panneau Admin — Vue d'ensemble](admin/overview.md)
-* [DHIS2 Intégration (admin)](admin/dhis2.md)
-* [Portails de Vérification (admin)](admin/verification-portals.md)
-* [Analytics Plateforme (admin)](admin/analytics.md)
-* [Détection Fraude IA (admin)](admin/fraud.md)
-* [Toutes les Campagnes (admin)](admin/campaigns.md)
-* [Jobs de Génération (admin)](admin/jobs.md)
-* [Commandes PVC (admin)](admin/pvc.md)
-* [Registre MPI Souverain (admin)](admin/mpi.md)
 
 ## Référence API
 
@@ -46,7 +30,7 @@
 * [Facturation](api-reference/billing.md)
 * [MPI](api-reference/mpi.md)
 * [DHIS2](api-reference/dhis2.md)
-* [Modules Enterprise (AI · Geo · Trust · Wallet)](api-reference/enterprise-modules.md)
+* [Modules Enterprise](api-reference/enterprise-modules.md)
 
 ## Intégrations
 
@@ -73,4 +57,4 @@
 
 ## Déploiement
 
-* [Guide de déploiement sécurisé](deployment.md)
+* [Guide de déploiement](deployment.md)

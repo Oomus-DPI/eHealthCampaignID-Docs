@@ -12,7 +12,7 @@ Chaque composant, utilisateur et processus n'accède qu'aux ressources stricteme
 
 - Les comptes DHIS2 utilisés par Oomus ont des droits en **lecture seule**
 - Les workers de génération ne peuvent pas accéder aux données de facturation
-- Les utilisateurs `programme_user` ne peuvent pas modifier les configurations
+- Les utilisateurs standard ne peuvent pas modifier les configurations système
 
 ### Secrets hors du code
 
@@ -21,7 +21,7 @@ Aucune information sensible (clés, mots de passe, tokens) n'est jamais stockée
 ### Validation stricte des fichiers
 
 Tous les fichiers uploadés (logos, templates) sont validés à plusieurs niveaux :
-- Vérification du type MIME (whitelist stricte)
+- Vérification du type MIME et des magic bytes
 - Contrôle de la taille maximale
 - Analyse du contenu (pas d'exécutable déguisé)
 - Stockage dans un espace isolé du code applicatif
@@ -34,27 +34,20 @@ Les environnements de développement, staging et production sont strictement iso
 
 ## Authentification
 
-### JWT HS256
+Oomus CampaignID utilise des tokens **JWT (JSON Web Token)** à courte durée de vie avec rotation automatique :
 
-Oomus CampaignID utilise des tokens **JWT (JSON Web Token)** avec algorithme **HS256** :
-
-- **Access token** : durée de vie de **8 heures** (`ACCESS_TOKEN_EXPIRE_MINUTES=480`) — réduit de 24h pour minimiser le risque en cas de fuite
-- **Refresh token** : durée de vie de **30 jours** — stocké sécurisement côté client
-- Rotation automatique des tokens à chaque rafraîchissement
-- **Algorithme fixé** dans `security.py` (pas lu depuis les settings) — prévient les attaques algorithm-confusion
-- **Token versioning** : champ `token_version` dans le payload JWT. Un changement de mot de passe incrémente la version et invalide immédiatement tous les tokens existants de l'utilisateur
+- Tokens d'accès à durée de vie limitée — renouvellement automatique via refresh token
+- **Authentification à deux facteurs (2FA)** via TOTP (Google Authenticator, Authy) disponible pour tous les comptes
+- **Protection brute-force** : verrouillage automatique après tentatives répétées échouées
+- **Révocation de session** : déconnexion individuelle ou globale (tous les appareils)
+- **Versioning de token** : un changement de mot de passe invalide immédiatement toutes les sessions actives
 
 ### Mots de passe
 
-Tous les mots de passe utilisateur sont hachés avec **bcrypt** :
-- Facteur de coût adapté aux recommandations NIST
+Tous les mots de passe utilisateur sont hachés avec une fonction de hachage adaptative conforme aux recommandations NIST :
 - Jamais stockés en clair, jamais loggés
-- **Politique de complexité renforcée** : minimum 10 caractères + au moins 1 majuscule + 1 minuscule + 1 chiffre + 1 caractère spécial (`!@#$%^&*()-_=+[]{}|;:,.<>?/~\``)
-- Compte administrateur : minimum 12 caractères, sans valeur par défaut
-
-### Sessions concurrentes
-
-Oomus CampaignID ne limite pas le nombre de sessions concurrentes par défaut, mais les tokens peuvent être révoqués par l'administrateur du programme si une compromission est suspectée.
+- Politique de complexité renforcée appliquée à l'inscription et au changement
+- Vérification contre les bases de mots de passe compromis (via protocole k-anonymat)
 
 ---
 
@@ -64,52 +57,33 @@ Oomus CampaignID implémente un contrôle d'accès basé sur les rôles (**RBAC*
 
 ### Rôles standard
 
-| Rôle | Description | Droits |
-|---|---|---|
-| `super_admin` | Administrateur global de la plateforme | Accès complet à tous les programmes et la configuration système |
-| `programme_admin` | Administrateur d'un programme | Gestion complète de son programme (campagnes, utilisateurs, configuration) |
-| `programme_user` | Utilisateur opérationnel | Consultation, lancement de jobs, distribution — pas de configuration |
+| Rôle | Description |
+|---|---|
+| **Super Admin** | Administrateur global de la plateforme |
+| **Programme Admin** | Gestion complète d'un programme |
+| **Utilisateur opérationnel** | Consultation, lancement de jobs, distribution |
 
 ### Rôles personnalisés
 
-Sur les plans National Campaign et Sovereign Enterprise, des rôles personnalisés peuvent être créés avec des permissions granulaires sur :
-- La gestion des campagnes (lecture / création / modification / suppression)
-- La génération de cartes (lancement, annulation)
-- La distribution (lecture, exécution)
-- La gestion des utilisateurs (lecture, invitation, désactivation)
-- La facturation (lecture, demande de rechargement)
-- La configuration DHIS2 (lecture, modification)
-- Les analytics (lecture)
+Sur les plans National Campaign et Sovereign Enterprise, des rôles personnalisés peuvent être créés avec des permissions granulaires sur les campagnes, la génération, la distribution, les utilisateurs, la facturation et les analytics.
 
 ### Périmètre d'accès
 
-Chaque utilisateur est associé à **un programme** et ne peut pas accéder aux données d'autres programmes (isolation stricte des données par organisation).
+Chaque utilisateur est associé à **un programme** et ne peut pas accéder aux données d'autres programmes — isolation stricte des données par organisation.
 
 ---
 
 ## Piste d'audit immuable
 
-Toutes les actions significatives réalisées sur la plateforme sont enregistrées dans une **piste d'audit immuable**.
+Toutes les actions significatives réalisées sur la plateforme sont enregistrées dans une **piste d'audit immuable** :
 
-### Ce qui est enregistré
+- Connexions et tentatives d'authentification
+- Modifications de campagnes et configurations
+- Lancements de génération et distributions
+- Changements de rôles et de plans
+- Opérations sur les identités MPI
 
-| Événement | Données enregistrées |
-|---|---|
-| Connexion utilisateur | Acteur, IP source, timestamp, succès/échec |
-| Création / modification de campagne | Acteur, action, données modifiées |
-| Lancement de job de génération | Acteur, campagne, volume, DPI |
-| Distribution de carte | Acteur, canal, timestamp (sans numéro de téléphone complet) |
-| Modification de configuration | Acteur, paramètre modifié, ancienne/nouvelle valeur |
-| Changement de rôle utilisateur | Acteur, cible, rôle attribué |
-| Changement de plan | Acteur, plan source, plan cible |
-| Fusion MPI (merge) | Acteur, MPI source, MPI cible, raison |
-
-### Caractéristiques de la piste d'audit
-
-- **Immuable** : les entrées d'audit ne peuvent pas être modifiées ni supprimées (même par un super_admin)
-- **Horodatée** : timestamp UTC précis à la seconde
-- **IP source** : adresse IP de l'acteur enregistrée
-- **Non répudiable** : chaque entrée lie une action à un acteur identifié
+**Caractéristiques :** immuable, horodatée UTC, liée à l'IP source, non répudiable.
 
 ---
 
@@ -117,8 +91,7 @@ Toutes les actions significatives réalisées sur la plateforme sont enregistré
 
 Les opérations à fort impact nécessitent une approbation explicite :
 
-- **Changement de plan** : notification à l'administrateur
-- **Simulation → Provisionnement** : workflow d'approbation admin (submitted → approved → provisioning → provisioned)
+- **Simulation → Provisionnement** : workflow d'approbation admin
 - **Fusion MPI** : requiert une justification écrite (auditée)
 - **Rechargement de solde** : demande soumise pour validation
 
@@ -126,19 +99,17 @@ Les opérations à fort impact nécessitent une approbation explicite :
 
 ## Protection des données en transit et au repos
 
-- **En transit** : HTTPS/TLS 1.3 recommandé pour toutes les communications (HTTP uniquement en développement local). Headers `Strict-Transport-Security` (HSTS) activés en production.
-- **Au repos** : données stockées dans PostgreSQL avec chiffrement recommandé au niveau du volume
-- **Fichiers générés** : stockés dans MinIO/S3-compatible, accès via URLs signées à durée limitée
-- **Secrets de configuration** : gérés par variables d'environnement, jamais en base de données
-- **Isolation réseau** : PostgreSQL et Redis sans port externe exposé. MinIO et Flower accessibles uniquement depuis `127.0.0.1`.
-- **Uploads sécurisés** : noms de fichiers sanitisés avec suffixe UUID — prévient les attaques de type path traversal.
-- **Headers sécurité** : `Content-Security-Policy` ajouté sur toutes les réponses API. Documentation Swagger masquée en production (`APP_ENV=production`).
+- **En transit** : HTTPS/TLS recommandé pour toutes les communications. Headers HSTS activés en production.
+- **Au repos** : données PostgreSQL avec chiffrement recommandé au niveau du volume
+- **Fichiers générés** : stockage objet S3-compatible, accès via URLs signées à durée limitée
+- **Isolation réseau** : bases de données et services internes sans port externe exposé
+- **Headers sécurité** : Content-Security-Policy, X-Frame-Options, X-Content-Type-Options sur toutes les réponses API
 
 ---
 
 ## Prochaines étapes
 
-- [Garanties cryptographiques](cryptographic-guarantees.md) — Détails des algorithmes
-- [Vérification hors ligne](offline-verification.md) — Sécurité du portail
+- [Garanties cryptographiques](cryptographic-guarantees.md) — Propriétés de sécurité des données
+- [Vérification hors ligne](offline-verification.md) — Sécurité du portail terrain
 - [Protection des données](data-protection.md) — Gestion des données personnelles
 - [Conformité légale](../compliance/legal-compliance.md)

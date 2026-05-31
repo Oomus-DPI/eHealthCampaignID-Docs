@@ -1,17 +1,12 @@
 # Authentification
 
-Oomus CampaignID utilise une authentification **JWT (JSON Web Token)** basée sur HS256. Toutes les requêtes API (sauf les endpoints publics documentés) nécessitent un token d'accès valide dans l'en-tête `Authorization`.
+Oomus CampaignID utilise une authentification **JWT (JSON Web Token)**. Toutes les requêtes API (sauf les endpoints publics documentés) nécessitent un token d'accès valide dans l'en-tête `Authorization`.
 
 **Base URL :** `https://api.oomus.health`
 
 ---
 
-## Durée de vie des tokens
-
-| Token | Durée de validité |
-|---|---|
-| **Access token** | 30 minutes |
-| **Refresh token** | 30 jours |
+## Tokens d'accès
 
 L'access token doit être inclus dans chaque requête API. Lorsqu'il expire, utilisez le refresh token pour obtenir un nouvel access token sans re-saisir vos identifiants.
 
@@ -27,10 +22,10 @@ Crée un nouveau compte programme.
 
 ```json
 {
-  "email": "ceo@oomus.org",
+  "email": "contact@programme.sn",
   "password": "VotreMotDePasse!Secure",
-  "full_name": "Programme National de Vaccination",
-  "organization": "Ministère de la Santé du Sénégal"
+  "name": "Programme National de Vaccination",
+  "country": "Sénégal"
 }
 ```
 
@@ -39,12 +34,11 @@ Crée un nouveau compte programme.
 ```json
 {
   "id": "usr_01HXYZ123ABC",
-  "email": "ceo@oomus.org",
-  "full_name": "Programme National de Vaccination",
-  "organization": "Ministère de la Santé du Sénégal",
+  "email": "contact@programme.sn",
+  "name": "Programme National de Vaccination",
   "role": "programme_admin",
   "plan": "starter",
-  "is_active": true,
+  "status": "active",
   "created_at": "2026-05-15T09:00:00Z"
 }
 ```
@@ -53,9 +47,8 @@ Crée un nouveau compte programme.
 
 | Code | Description |
 |---|---|
-| `400` | Corps de requête invalide (champs manquants, format incorrect) |
-| `409` | Un compte avec cette adresse e-mail existe déjà |
-| `422` | Erreur de validation (mot de passe trop faible, e-mail invalide) |
+| `400` | Email déjà utilisé |
+| `422` | Validation échouée (mot de passe trop faible, email invalide) |
 
 ---
 
@@ -67,40 +60,44 @@ Authentifie un utilisateur et retourne les tokens JWT.
 
 ```json
 {
-  "email": "ceo@oomus.org",
+  "email": "contact@programme.sn",
   "password": "VotreMotDePasse!Secure"
 }
 ```
 
-**Réponse 200 OK :**
+**Réponse 200 OK (sans 2FA) :**
 
 ```json
 {
-  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3JfMDFIWFlaMTIzQUJDIiwiZXhwIjoxNzQ3MzA2NDAwfQ...",
-  "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3JfMDFIWFlaMTIzQUJDIiwidHlwZSI6InJlZnJlc2gifQ...",
+  "access_token": "<access_token>",
+  "refresh_token": "<refresh_token>",
   "token_type": "bearer",
-  "expires_in": 1800
+  "requires_2fa": false,
+  "programme": { "...": "..." }
 }
 ```
+
+**Réponse 200 OK (avec 2FA activée) :**
+
+```json
+{
+  "access_token": "",
+  "refresh_token": "",
+  "token_type": "bearer",
+  "requires_2fa": true,
+  "totp_token": "<totp_pending_token>"
+}
+```
+
+> Si `requires_2fa: true`, appelez `POST /auth/2fa/login` avec le `totp_token` reçu et le code TOTP.
 
 **Erreurs possibles :**
 
 | Code | Description |
 |---|---|
 | `401` | Identifiants incorrects |
-| `403` | Compte désactivé |
-| `422` | Format de la requête invalide |
-
-**Exemple cURL :**
-
-```bash
-curl -X POST https://api.oomus.health/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "ceo@oomus.org",
-    "password": "VotreMotDePasse!Secure"
-  }'
-```
+| `403` | Compte suspendu |
+| `429` | Trop de tentatives — réessayez plus tard |
 
 ---
 
@@ -112,7 +109,7 @@ Obtient un nouvel access token à partir d'un refresh token valide.
 
 ```json
 {
-  "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  "refresh_token": "<refresh_token>"
 }
 ```
 
@@ -120,9 +117,9 @@ Obtient un nouvel access token à partir d'un refresh token valide.
 
 ```json
 {
-  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3JfMDFIWFlaMTIzQUJDIiwiZXhwIjoxNzQ3MzA2NDAwfQ...",
-  "token_type": "bearer",
-  "expires_in": 1800
+  "access_token": "<nouvel_access_token>",
+  "refresh_token": "<nouveau_refresh_token>",
+  "token_type": "bearer"
 }
 ```
 
@@ -130,7 +127,23 @@ Obtient un nouvel access token à partir d'un refresh token valide.
 
 | Code | Description |
 |---|---|
-| `401` | Refresh token invalide ou expiré |
+| `401` | Refresh token invalide, expiré ou révoqué |
+
+---
+
+### POST /auth/logout
+
+Révoque le token d'accès courant (déconnexion de la session active).
+
+**Réponse 204 No Content**
+
+---
+
+### POST /auth/logout-all
+
+Révoque toutes les sessions actives du compte (tous les appareils).
+
+**Réponse 204 No Content**
 
 ---
 
@@ -138,20 +151,14 @@ Obtient un nouvel access token à partir d'un refresh token valide.
 
 Retourne le profil de l'utilisateur authentifié.
 
-**En-tête requis :**
-```
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-```
-
 **Réponse 200 OK :**
 
 ```json
 {
   "id": "usr_01HXYZ123ABC",
-  "email": "ceo@oomus.org",
+  "email": "contact@programme.sn",
   "name": "Programme National de Vaccination",
   "country": "Sénégal",
-  "phone": "+221XXXXXXXXX",
   "role": "programme_admin",
   "plan": "starter",
   "status": "active",
@@ -160,36 +167,22 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
   "is_admin": false,
   "permissions": [],
   "two_factor_enabled": false,
-  "logo_url": "data:image/png;base64,iVBORw0K...",
+  "logo_url": null,
   "created_at": "2026-05-15T09:00:00Z"
 }
 ```
-
-> **`logo_url`** — Data URI base64 du logo programme (`data:{type};base64,{b64}`), stocké directement en base. `null` si aucun logo uploadé.
-> **`two_factor_enabled`** — `true` si la 2FA TOTP est activée sur ce compte.
 
 ---
 
 ### PATCH /auth/me
 
-Met à jour le profil de l'utilisateur authentifié.
-
-**Corps de la requête (champs optionnels) :**
-
-```json
-{
-  "full_name": "Nouveau Nom",
-  "organization": "Nouvelle Organisation"
-}
-```
-
-**Réponse 200 OK :** profil mis à jour (même schéma que GET /auth/me)
+Met à jour le profil de l'utilisateur authentifié (nom, pays, téléphone).
 
 ---
 
 ### POST /auth/change-password
 
-Modifie le mot de passe de l'utilisateur authentifié.
+Modifie le mot de passe. Invalide toutes les sessions actives.
 
 **Corps de la requête :**
 
@@ -200,19 +193,13 @@ Modifie le mot de passe de l'utilisateur authentifié.
 }
 ```
 
-**Réponse 204 No Content** (succès silencieux)
-
-**Erreurs possibles :**
-
-| Code | Description |
-|---|---|
-| `400` | Mot de passe actuel incorrect ou nouveau mot de passe identique à l'ancien |
+**Réponse 204 No Content**
 
 ---
 
 ### POST /auth/logo
 
-Upload le logo du programme (PNG / JPEG / WEBP, max 512 KB). Le logo est encodé en base64 et stocké en base de données dans `logo_url`. Il est automatiquement renvoyé dans `ProgrammeOut` (GET /auth/me) et affiché dans la sidebar et le profil.
+Upload le logo du programme (PNG / JPEG / WEBP, max 512 KB).
 
 **Content-Type :** `multipart/form-data`
 
@@ -220,24 +207,22 @@ Upload le logo du programme (PNG / JPEG / WEBP, max 512 KB). Le logo est encodé
 |---|---|---|
 | `file` | `File` | Image PNG, JPEG ou WEBP (≤ 512 KB) |
 
-**Réponse 200 OK :** profil complet mis à jour (même schéma que GET /auth/me, avec `logo_url` renseigné)
-
-**Erreurs possibles :**
-
-| Code | Description |
-|---|---|
-| `400` | Format de fichier non supporté (seuls PNG/JPEG/WEBP acceptés) |
-| `413` | Image trop volumineuse (max 512 KB) |
-
 ---
 
 ## Authentification à deux facteurs (2FA TOTP)
 
-La 2FA est basée sur le standard TOTP (RFC 6238 — Time-based One-Time Password), compatible avec Google Authenticator, Authy et tout client TOTP standard.
+La 2FA est basée sur le standard TOTP (RFC 6238), compatible avec Google Authenticator, Authy et tout client TOTP standard.
+
+### Flux complet
+
+```
+1. POST /auth/login      → { requires_2fa: true, totp_token: "..." }
+2. POST /auth/2fa/login  → { access_token, refresh_token } (tokens définitifs)
+```
 
 ### POST /auth/2fa/setup
 
-Génère un nouveau secret TOTP et retourne l'URI de provisioning pour le scan QR.
+Génère un secret TOTP et retourne l'URI de provisioning.
 
 **Réponse 200 OK :**
 
@@ -248,73 +233,42 @@ Génère un nouveau secret TOTP et retourne l'URI de provisioning pour le scan Q
 }
 ```
 
-Le secret retourné doit être transmis à `POST /auth/2fa/verify-setup` pour activer la 2FA. Il n'est pas encore enregistré en base à ce stade.
-
----
-
 ### POST /auth/2fa/verify-setup
 
-Vérifie le code TOTP saisi et active la 2FA sur le compte.
-
-**Corps de la requête :**
+Active la 2FA après confirmation du code.
 
 ```json
-{
-  "secret": "BASE32SECRETHERE",
-  "code": "123456"
-}
+{ "secret": "BASE32SECRETHERE", "code": "123456" }
 ```
-
-**Réponse 200 OK :** profil mis à jour avec `two_factor_enabled: true`
-
-**Erreurs possibles :**
-
-| Code | Description |
-|---|---|
-| `400` | Code TOTP invalide (code expiré, mauvais secret) |
-| `501` | Module `pyotp` non installé (backend) |
-
----
 
 ### DELETE /auth/2fa/disable
 
-Désactive la 2FA sur le compte. Le `totp_secret` est effacé et `two_factor_enabled` passe à `false`.
+Désactive la 2FA. Requiert la confirmation du mot de passe actuel.
 
-**Réponse 200 OK :** profil mis à jour avec `two_factor_enabled: false`
-
----
+```json
+{ "current_password": "VotreMotDePasse!" }
+```
 
 ### POST /auth/2fa/login
 
-Deuxième étape d'authentification lorsque la 2FA est activée. À appeler après une connexion `POST /auth/login` réussie, en fournissant le code TOTP courant.
-
-**Corps de la requête :**
+Complète l'authentification 2FA avec le token intermédiaire et le code TOTP.
 
 ```json
 {
-  "email": "ceo@oomus.org",
+  "totp_token": "<totp_pending_token>",
   "code": "123456"
 }
 ```
 
-**Réponse 200 OK :** tokens JWT (même schéma que `POST /auth/login`)
-
-**Erreurs possibles :**
-
-| Code | Description |
-|---|---|
-| `400` | 2FA non configurée sur ce compte |
-| `401` | Code TOTP invalide |
+**Réponse 200 OK :** tokens JWT définitifs (même schéma que `POST /auth/login`)
 
 ---
 
 ## Utilisation du token dans les requêtes
 
-Incluez l'access token dans l'en-tête `Authorization` de toutes vos requêtes API :
-
 ```bash
-curl -X GET https://api.oomus.health/campaigns/ \
-  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+curl -X GET https://api.oomus.health/campaigns \
+  -H "Authorization: Bearer <access_token>"
 ```
 
 ---
@@ -324,41 +278,14 @@ curl -X GET https://api.oomus.health/campaigns/ \
 ### Flux recommandé
 
 ```
-1. Login → stocker access_token + refresh_token
+1. Login  → stocker access_token + refresh_token (côté client)
 2. Utiliser access_token pour les requêtes
-3. Si réponse 401 (token expiré) :
-   → Appeler POST /auth/refresh avec le refresh_token
+3. Si réponse 401 :
+   → POST /auth/refresh avec le refresh_token
    → Stocker le nouvel access_token
-   → Retry la requête originale
-4. Si refresh_token expiré (après 30 jours) :
-   → Rediriger l'utilisateur vers la page de login
-```
-
-### Implémentation JavaScript (exemple)
-
-```javascript
-async function apiRequest(url, options = {}) {
-  const token = localStorage.getItem("access_token");
-  const response = await fetch(url, {
-    ...options,
-    headers: {
-      ...options.headers,
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  if (response.status === 401) {
-    // Token expiré — tentative de rafraîchissement
-    const refreshed = await refreshAccessToken();
-    if (refreshed) {
-      return apiRequest(url, options); // Retry
-    } else {
-      redirectToLogin();
-    }
-  }
-
-  return response;
-}
+   → Réessayer la requête
+4. Si refresh_token invalide :
+   → Rediriger vers la page de connexion
 ```
 
 ---
