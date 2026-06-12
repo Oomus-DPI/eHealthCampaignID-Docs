@@ -105,7 +105,7 @@ Le QR code imprimé sur la carte contient un **jeton opaque dérivé par SHA-256
 | Logs d'audit | 5 ans | Non (conformité) |
 | Logs de distribution | 1 an | Oui |
 | Artifacts PDF/ZIP | 6 mois | Oui |
-| Tokens de session | Durée du token (30 min / 30 jours) | Non |
+| Tokens de session | Durée de vie du token (courte durée / longue durée) | Non |
 
 ---
 

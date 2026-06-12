@@ -60,7 +60,7 @@ Le portail de vérification d'Oomus CampaignID est un artefact statique (HTML + 
 
 ### Sovereign Wallet
 - Passes digitaux signés HMAC-SHA256 — vérifiables hors ligne
-- Bundle offline chiffré XOR-SHA256 pour synchronisation sur appareil
+- Bundle offline chiffré pour synchronisation sur appareil
 - Gestion multi-appareils avec historique de synchronisation
 - Révocation auditée et horodatée
 - Portail public de vérification de pass : `/verify?p=<payload>&s=<sig>`
@@ -105,9 +105,10 @@ Le panneau d'administration offre une gestion opérationnelle complète de la pl
 | **Registre MPI Souverain** | Fédération cross-programmes, fusion doublons, vérification KYC, audit trail complet |
 
 ### Sécurité et conformité
-- Authentification JWT HS256 (algorithme fixé, token versioning) + bcrypt, RBAC institutionnel
-- Access token 8h, politique de mots de passe renforcée (10 chars + complexité)
-- Isolation réseau Docker : PostgreSQL/Redis sans port externe, MinIO/Flower sur 127.0.0.1
+
+- Authentification JWT sécurisée (algorithme fixé, token versioning) + hachage fort, RBAC institutionnel
+- Politique de mots de passe renforcée (longueur + complexité)
+- Isolation réseau : bases de données et services internes sans port externe exposé
 - CORS strict, Content-Security-Policy, HSTS en production
 - Chaîne d'audit immuable (SHA-256)
 - Détection d'anomalies par IA (IsolationForest)

@@ -24,7 +24,7 @@ Ce guide vous permet de créer votre première campagne et de générer vos prem
 curl -X POST https://api.oomus.health/auth/register \
   -H "Content-Type: application/json" \
   -d '{
-    "email": "ceo@oomus.org",
+    "email": "contact@votre-programme.sn",
     "password": "VotreMotDePasse!",
     "full_name": "Programme National de Vaccination",
     "organization": "Ministère de la Santé du Sénégal"
@@ -35,7 +35,7 @@ curl -X POST https://api.oomus.health/auth/register \
 ```json
 {
   "id": "usr_01HXYZ123ABC",
-  "email": "ceo@oomus.org",
+  "email": "contact@votre-programme.sn",
   "full_name": "Programme National de Vaccination",
   "organization": "Ministère de la Santé du Sénégal",
   "role": "programme_admin",
@@ -53,7 +53,7 @@ curl -X POST https://api.oomus.health/auth/register \
 curl -X POST https://api.oomus.health/auth/login \
   -H "Content-Type: application/json" \
   -d '{
-    "email": "ceo@oomus.org",
+    "email": "contact@votre-programme.sn",
     "password": "VotreMotDePasse!"
   }'
 ```
@@ -61,14 +61,13 @@ curl -X POST https://api.oomus.health/auth/login \
 **Réponse :**
 ```json
 {
-  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "token_type": "bearer",
-  "expires_in": 28800
+  "access_token": "<access_token>",
+  "refresh_token": "<refresh_token>",
+  "token_type": "bearer"
 }
 ```
 
-> Conservez votre `access_token`. Il expire après **8 heures**. Utilisez le `refresh_token` (valable **30 jours**) pour en obtenir un nouveau sans re-saisir vos identifiants.
+> Conservez votre `access_token`. Utilisez le `refresh_token` pour en obtenir un nouveau automatiquement sans re-saisir vos identifiants (géré par le SDK client).
 
 Dans tous les exemples suivants, remplacez `<VOTRE_TOKEN>` par la valeur de votre `access_token`.
 

@@ -246,7 +246,7 @@ Aucune donnée périmée n'est affichée sans indication visible à l'opérateur
 | Mécanisme | Algorithme | Usage |
 |---|---|---|
 | Signature QR | HMAC-SHA256 | Vérification authenticité hors ligne |
-| Bundle offline | XOR-SHA256 | Chiffrement données sur appareil |
+| Bundle offline | Chiffrement symétrique | Chiffrement données sur appareil |
 | Transport | HTTPS · TLS 1.3 | Communication API |
 | Révocation | Auditée + horodatée | Journalisée dans `WalletRevocation` |
 

@@ -327,7 +327,7 @@ wss://api.oomus.health/ws/jobs/{job_id}?token={access_token}
 # Étape 1 : S'authentifier
 TOKEN=$(curl -s -X POST https://api.oomus.health/auth/login \
   -H "Content-Type: application/json" \
-  -d '{"email": "ceo@oomus.org", "password": "MonMDP!"}' \
+  -d '{"email": "contact@votre-programme.sn", "password": "MonMDP!"}' \
   | jq -r '.access_token')
 
 # Étape 2 : Créer la campagne
