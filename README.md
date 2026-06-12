@@ -2,7 +2,7 @@
 
 **Infrastructure souveraine de santé publique numérique pour les programmes nationaux en Afrique et dans les pays à ressources limitées.**
 
-> **Version** : 5.16 · **Date** : 2026-05-31 · **Statut** : Production
+> **Version** : 6.2 · **Date** : 2026-06-11 · **Statut** : Production
 
 ---
 
@@ -25,6 +25,7 @@ Oomus CampaignID permet aux programmes de santé nationaux et aux organisations 
 - **Émettre** des Sovereign Wallet Passes — passes digitaux signés, synchronisables hors ligne
 - **Produire** des cartes PVC physiques en deux qualités d'impression
 - **Facturer** avec une traçabilité complète — chaque débit génère automatiquement une facture formelle signée
+- **Accéder** à l'identité souveraine depuis l'application mobile **OOMUS Wallet** (iOS + Android) — bilingue FR/EN
 
 ---
 
@@ -41,6 +42,7 @@ Oomus CampaignID permet aux programmes de santé nationaux et aux organisations 
 - **Billing Infrastructure** — Registre comptable centralisé avec factures signées et audit immuable
 - **Dashboard opérationnel** — KPIs temps réel, analytics avancées, alertes
 - **Sécurité Enterprise** — 2FA TOTP, brute-force protection, JTI token revocation, RBAC institutionnel
+- **Application mobile bilingue** — OOMUS Wallet React Native / Expo SDK 54 — FR/EN, biométrie, offline-first
 
 ---
 
@@ -77,6 +79,7 @@ Oomus CampaignID permet aux programmes de santé nationaux et aux organisations 
 | Files de tâches | Celery + Redis |
 | Stockage fichiers | S3-compatible |
 | Interopérabilité | HL7 FHIR R4 |
+| **Application mobile** | React Native 0.81.5 · Expo SDK 54 · TypeScript · i18next (FR/EN) |
 
 ---
 
@@ -85,6 +88,41 @@ Oomus CampaignID permet aux programmes de santé nationaux et aux organisations 
 Rendez-vous sur [Démarrage rapide](getting-started/quick-start.md) pour créer votre premier programme et générer vos premières cartes.
 
 Consultez les [Plans & Fonctionnalités](getting-started/plans-and-pricing.md) pour choisir le plan adapté à votre programme.
+
+---
+
+---
+
+## Application mobile — OOMUS Wallet
+
+L'application mobile **OOMUS Wallet** (React Native / Expo SDK 54) permet à chaque citoyen d'accéder à son identité souveraine MPI, ses passes de santé et de contrôler le partage de ses données depuis son téléphone.
+
+**Fonctionnalités clés :**
+
+- Connexion OTP SMS → PIN 6 chiffres → biométrie (Face ID / Fingerprint)
+- Carte d'identité souveraine `SovereignCard` avec QR HMAC-SHA256
+- Gestion des passes de santé (vaccination, assurance, ordonnance…)
+- Consentements de partage avec GrantModal 2 étapes
+- Journal d'activité complet du wallet
+- Module Assurance maladie — couvertures, vérification d'actes, historique
+- **Bilingue FR/EN** — sélecteur de langue dans Paramètres, persistance AsyncStorage
+- Mode hors ligne (SyncContext) — passes et identité en cache
+
+**Démarrage :**
+
+```bash
+cd mobile
+npm install
+npx expo start          # QR code Expo Go
+npx expo run:ios        # Simulateur iOS
+npx expo run:android    # Émulateur Android
+```
+
+**Variables d'environnement :**
+
+```bash
+EXPO_PUBLIC_API_URL=https://api.oomus.org   # URL du backend
+```
 
 ---
 

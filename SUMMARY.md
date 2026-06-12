@@ -48,12 +48,17 @@
 
 ## Conformité
 
+* [Conditions Générales d'Utilisation](compliance/terms-of-use.md)
 * [Conformité légale](compliance/legal-compliance.md)
 * [IA & Éthique](compliance/ai-ethics.md)
 
 ## Niveaux de service
 
 * [Accord de niveau de service (SLA)](service-levels.md)
+
+## Application mobile
+
+* [OOMUS Wallet — Vue d'ensemble](features/mobile-wallet.md)
 
 ## Déploiement
 
