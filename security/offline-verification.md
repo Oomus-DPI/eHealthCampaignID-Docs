@@ -8,17 +8,7 @@ La vérification hors ligne est l'une des capacités les plus distinctives d'Oom
 
 ### Génération du portail
 
-À la fin de chaque job de génération réussi, Oomus CampaignID produit automatiquement un **portail de vérification statique** :
-
-```
-verification-portal/
-├── index.html          # Interface de vérification (SPA compilée)
-├── registry.json       # Registre des codes (hachés SHA-256)
-├── manifest.json       # Métadonnées de la campagne
-└── assets/
-    ├── app.js          # Logique WebCrypto
-    └── styles.css
-```
+À la fin de chaque job de génération réussi, Oomus CampaignID produit automatiquement un **portail de vérification statique** : une archive autonome contenant l'interface de vérification, le registre des codes et les ressources nécessaires au fonctionnement hors ligne.
 
 ### Distribution du portail
 
@@ -33,21 +23,7 @@ Le portail peut être distribué par plusieurs moyens selon la connectivité dis
 
 ### Vérification côté client
 
-Une fois le portail téléchargé, **toutes les vérifications s'effectuent localement dans le navigateur** :
-
-```
-Agent scanne/saisit le code
-           │
-           ▼
-JavaScript (app.js) + WebCrypto API
-           │
-           ▼
-Lookup SHA-256 dans registry.json local
-           │
-           ▼
-Résultat affiché instantanément
-(aucune requête réseau effectuée)
-```
+Une fois le portail téléchargé, **toutes les vérifications s'effectuent localement dans le navigateur** via l'API WebCrypto native. Le code scanné ou saisi est vérifié instantanément contre le registre local — aucune requête réseau n'est effectuée.
 
 ---
 

@@ -43,22 +43,7 @@ Cela signifie qu'une tentative de falsification des données chiffrées est dét
 
 ## Auditabilité — Chaîne de hachage SHA-256
 
-Oomus CampaignID maintient une **chaîne de hachage SHA-256** qui lie chaque entrée d'audit à la précédente, formant une chaîne immuable.
-
-### Comment fonctionne la chaîne
-
-```
-Bloc 0 (Genesis)
-   │ SHA-256(données_0 + hash_genesis)
-   ▼
-Bloc 1 : hash_1 = SHA-256(données_1 + hash_0)
-   │
-   ▼
-Bloc 2 : hash_2 = SHA-256(données_2 + hash_1)
-   │
-   ▼
-   ...
-```
+Oomus CampaignID maintient une **chaîne de hachage SHA-256** qui lie chaque entrée d'audit à la précédente, formant une chaîne immuable. Chaque bloc intègre un lien cryptographique vers le bloc précédent, rendant toute falsification rétrospective détectable.
 
 ### Garanties
 

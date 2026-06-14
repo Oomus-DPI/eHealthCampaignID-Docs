@@ -66,8 +66,8 @@ Internet (HTTPS)
 ## Démarrage rapide (Docker Compose)
 
 ```bash
-# 1. Cloner le dépôt
-git clone https://github.com/Oomus-DPI/eHealth-CampaignID-SaaS.git
+# 1. Obtenir le dépôt
+# (L'URL du dépôt vous est communiquée lors de l'onboarding Oomus)
 cd eHealth-CampaignID-SaaS
 
 # 2. Configurer les variables d'environnement
@@ -81,7 +81,7 @@ docker compose up -d
 docker compose exec backend alembic upgrade head
 
 # 5. Initialiser la base de données
-docker compose exec backend python -m app.db.init_db
+docker compose exec backend python -m scripts.init_db
 
 # 6. Vérifier
 curl http://localhost:8000/health
@@ -103,13 +103,13 @@ CORS_ORIGINS=https://app.votredomaine.sn
 
 # ── Clés cryptographiques (générer avec openssl rand -hex 32+) ──
 SECRET_KEY=<clé forte générée — voir documentation>
-# Clés additionnelles pour les modules QR et messagerie
-# Voir .env.example pour la liste complète
+# Des clés additionnelles sont requises pour les modules avancés.
+# Voir .env.example pour la liste complète et les instructions de génération.
 
-# ── Services tiers (selon activation) ───────────────────────
-WHATSAPP_API_TOKEN=<token Meta>
-ORANGE_SMS_AUTH_HEADER=<header Orange>
-GOOGLE_WALLET_ISSUER_ID=<issuer ID>
+# ── Services tiers (selon modules activés) ───────────────────────
+# Variables de configuration pour WhatsApp, SMS et wallet numérique.
+# Obtenues lors de l'onboarding ou dans votre espace partenaire.
+# Voir .env.example pour les noms et descriptions exacts.
 ```
 
 > Le fichier `.env.example` à la racine du dépôt liste toutes les variables disponibles avec leur description.
