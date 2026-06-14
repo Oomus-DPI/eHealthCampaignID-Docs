@@ -59,6 +59,9 @@
 ## Application mobile
 
 * [OOMUS Wallet — Vue d'ensemble](features/mobile-wallet.md)
+* [Portefeuille Citoyen temps réel](features/mobile-wallet.md#portefeuille-citoyen-temps-réel-v7v8)
+* [Registre d'Identités Souveraines](features/mobile-wallet.md#registre-didentités-souveraines-v7v8)
+* [KYC → Score de Confiance MPI](features/mobile-wallet.md#kyc--score-de-confiance-mpi-v80)
 
 ## Déploiement
 

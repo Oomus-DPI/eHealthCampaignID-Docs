@@ -2,7 +2,7 @@
 
 **Infrastructure souveraine de santé publique numérique pour les programmes nationaux en Afrique et dans les pays à ressources limitées.**
 
-> **Version** : 6.2 · **Date** : 2026-06-11 · **Statut** : Production
+> **Version** : 8.0 · **Date** : 2026-06-14 · **Statut** : Production
 
 ---
 
@@ -26,6 +26,8 @@ Oomus CampaignID permet aux programmes de santé nationaux et aux organisations 
 - **Produire** des cartes PVC physiques en deux qualités d'impression
 - **Facturer** avec une traçabilité complète — chaque débit génère automatiquement une facture formelle signée
 - **Accéder** à l'identité souveraine depuis l'application mobile **OOMUS Wallet** (iOS + Android) — bilingue FR/EN
+- **Vérifier** son identité avec le wizard KYC 5 étapes (CNI + selfie biométrique) — score de confiance MPI mis à jour en temps réel
+- **Consulter** le Registre d'Identités Souveraines — niveaux IAL 0–3, fonctionnalités débloquées, intégrité cryptographique
 
 ---
 
@@ -43,13 +45,16 @@ Oomus CampaignID permet aux programmes de santé nationaux et aux organisations 
 - **Dashboard opérationnel** — KPIs temps réel, analytics avancées, alertes
 - **Sécurité Enterprise** — 2FA TOTP, brute-force protection, JTI token revocation, RBAC institutionnel
 - **Application mobile bilingue** — OOMUS Wallet React Native / Expo SDK 54 — FR/EN, biométrie, offline-first
+- **KYC Wizard 5 étapes** — vérification d'identité CNI + selfie, score de confiance MPI propagé en temps réel via WebSocket
+- **Portefeuille Citoyen temps réel** — activité live, `ACTION_LABELS` humains, filtres, toasts animés
+- **Registre d'Identités Souveraines** — niveaux IAL 0–3, empreinte cryptographique, signalement d'erreur
 
 ---
 
 ## Pour qui
 
 | Public cible | Cas d'usage typique |
-|---|---|
+| --- | --- |
 | Programmes nationaux de santé | Vaccination, paludisme, nutrition, HIV/PTME |
 | Ministères de la Santé | Carte d'assurance maladie universelle, identité sanitaire nationale |
 | Agences humanitaires & ONG | Identification des réfugiés, distribution de moustiquaires |
@@ -61,7 +66,7 @@ Oomus CampaignID permet aux programmes de santé nationaux et aux organisations 
 ## Plans disponibles
 
 | Plan | Identités/mois | SMS/mois | WhatsApp/mois |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | **Essential** | 10 000 | 50 000 | 10 000 |
 | **Regional Command** | 100 000 | 250 000 | 100 000 |
 | **National Infrastructure** | 1 000 000 | 3 000 000 | 1 000 000 |
@@ -72,7 +77,7 @@ Oomus CampaignID permet aux programmes de santé nationaux et aux organisations 
 ## Stack technique
 
 | Composant | Technologie |
-|---|---|
+| --- | --- |
 | Frontend | Next.js + React + TypeScript |
 | Backend | FastAPI + Python + SQLAlchemy |
 | Base de données | PostgreSQL 16 |
@@ -80,6 +85,8 @@ Oomus CampaignID permet aux programmes de santé nationaux et aux organisations 
 | Stockage fichiers | S3-compatible |
 | Interopérabilité | HL7 FHIR R4 |
 | **Application mobile** | React Native 0.81.5 · Expo SDK 54 · TypeScript · i18next (FR/EN) |
+| **Temps réel mobile** | WebSocket + Redis pubsub · SyncContext · `publish_wallet_event()` |
+| **KYC Trust Bridge** | `kyc_trust_bridge.py` · `MpiTrustScore` · `MpiVerificationEvent` |
 
 ---
 
@@ -101,12 +108,15 @@ L'application mobile **OOMUS Wallet** (React Native / Expo SDK 54) permet à cha
 
 - Connexion OTP SMS → PIN 6 chiffres → biométrie (Face ID / Fingerprint)
 - Carte d'identité souveraine `SovereignCard` avec QR HMAC-SHA256
-- Gestion des passes de santé (vaccination, assurance, ordonnance…)
+- **Wizard KYC 5 étapes** — CNI + selfie biométrique, score MPI mis à jour en temps réel après finalisation
+- **Portefeuille Citoyen** — activité live WebSocket, `ACTION_LABELS` humains, filtres Tous/Portefeuille/Santé/Identité
+- **Registre d'Identités Souveraines** — niveaux IAL 0–3, empreinte cryptographique, signalement d'erreur, services débloqués
+- Gestion des passes de santé (vaccination, assurance, ordonnance…) avec overlay `Niveau IAL{n} requis`
 - Consentements de partage avec GrantModal 2 étapes
-- Journal d'activité complet du wallet
+- Journal d'activité complet — labels humains, fallback `'Événement système'`
 - Module Assurance maladie — couvertures, vérification d'actes, historique
 - **Bilingue FR/EN** — sélecteur de langue dans Paramètres, persistance AsyncStorage
-- Mode hors ligne (SyncContext) — passes et identité en cache
+- Mode hors ligne (SyncContext) — passes et identité en cache, sync auto au retour réseau
 
 **Démarrage :**
 
